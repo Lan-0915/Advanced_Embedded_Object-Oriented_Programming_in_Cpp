@@ -1,0 +1,7 @@
+02:23:22 **** Incremental Build of configuration Debug for project cpp_8_operators ****
+make -j32 all 
+arm-none-eabi-size  cpp_8_operators.elf 
+   text	   data	    bss	    dec	    hex	filename
+   1428	      0	   1568	   2996	    bb4	cpp_8_operators.elf
+Finished building: default.size.stdout
+ 

@@ -1,0 +1,17 @@
+20:59:05 **** Incremental Build of configuration Debug for project 3_system_divers-timebase ****
+make -j32 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/3_system_divers-timebase/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/3_system_divers-timebase/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+arm-none-eabi-gcc -o "3_system_divers-timebase.elf" @"objects.list"   -mcpu=cortex-m4 -T"G:\STM32BareMetal_Project\3_system_divers-timebase\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3_system_divers-timebase.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 3_system_divers-timebase.elf
+ 
+arm-none-eabi-size  3_system_divers-timebase.elf 
+arm-none-eabi-objdump -h -S 3_system_divers-timebase.elf  > "3_system_divers-timebase.list"
+   text	   data	    bss	    dec	    hex	filename
+   5468	     92	   1908	   7468	   1d2c	3_system_divers-timebase.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3_system_divers-timebase.list
+ 
+
+20:59:06 Build Finished. 0 errors, 0 warnings. (took 680ms)
+

@@ -1,0 +1,36 @@
+#include "timebase.h"
+#include "stm32f4xx.h"
+
+#define CTRL_ENABLE		(1U<<0)
+#define CTRL_TICKINT	(1U<<1)
+#define CTRL_CLCKSRC	(1U<<2)
+#define CTRL_COUNTFLAG	(1U<<16)
+
+
+void timebase_init(void) {
+
+	/**
+	 * 启用 systick 的步骤
+	 * */
+
+	// 1. 禁用全局中断
+
+
+	// 2. 用每秒的时钟周期数来加载计时器
+
+
+	// 3. 清除 systick 当前值寄存器
+
+
+	// 4. 选择内部时钟源
+
+
+	// 5. 启用中断
+
+
+	// 6. 启用 systick
+
+
+	// 7. 启用全局中断
+}
+

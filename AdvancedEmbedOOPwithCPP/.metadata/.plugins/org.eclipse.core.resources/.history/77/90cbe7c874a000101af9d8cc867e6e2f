@@ -1,0 +1,24 @@
+#ifndef ADXL345_HPP
+#define ADXL345_HPP
+
+#include "SPI.hpp"
+#include <cstdint>
+
+
+
+class ADXL345 {
+private:
+	SPI& spi;
+	uint32_t deviceAddress;
+	int16_t accel_x, accel_y, accel_z;
+
+	void writeRegister(uint8_t reg, uint8_t value);
+	void readRegister(uint8_t reg, uint8_t * data, uint8_t size);
+
+public:
+	//
+};
+
+
+
+#endif

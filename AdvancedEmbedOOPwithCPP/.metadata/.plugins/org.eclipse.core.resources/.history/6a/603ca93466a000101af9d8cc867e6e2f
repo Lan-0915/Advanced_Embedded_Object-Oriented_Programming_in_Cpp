@@ -1,0 +1,18 @@
+#include "SPI.hpp"
+
+
+#define GPIOAEN		(1U<<0)
+#define SPI1EN		(1U<<12)
+
+#define SR_TXE		(1U<<1)
+#define SR_RXNE		(1U<<0)
+
+#define SR_BSY		(1U<<7)
+
+
+
+SPI::SPI(SPI_TypeDef * spi, GPIO_TypeDef * gpioPort, uint8_t csPin)
+		: spi(spi), gpioPort(gpioPort), csPin(csPin) {}
+
+
+

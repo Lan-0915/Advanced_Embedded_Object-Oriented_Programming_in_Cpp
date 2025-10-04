@@ -1,0 +1,31 @@
+#ifndef UART_HPP
+#define UART_HPP
+
+#include "stm32f4xx.h"
+
+
+class GPIO {
+private:
+	GPIO_TypeDef * port;
+	uint8_t pin;
+
+public:
+	// 构造函数
+	GPIO(GPIO_TypeDef * gpioPort, uint8_t gpioPin, bool isOutput = true);
+
+	// 切换引脚状态
+	void toggle();
+
+	// 将引脚设置为低电平
+	void setLow();
+
+	// 将引脚设置为高电平
+	void setHigh();
+
+	// 读取引脚状态
+	bool read();
+};
+
+
+
+#endif

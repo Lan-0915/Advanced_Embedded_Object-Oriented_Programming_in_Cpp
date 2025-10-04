@@ -1,0 +1,37 @@
+#include "GPIO.hpp"
+#include "UART.hpp"
+#include "FPU.hpp"
+#include "Timebase.hpp"
+#include "ADC.hpp"
+
+
+int main() {
+	// 启用 FPU
+	FPU_CP::enable();
+
+	// 初始化 systick
+	Timebase::init();
+
+	// 创建 ADC_MODULE 对象 ADC
+	ADC_MODULE adc1(ADC1, GPIOA, 1);
+
+	// 创建 GPIO 对象 led, 将 PA5 设置为输出引脚
+	GPIO led(GPIOA, 5, true);
+
+	// 创建 GPIO 对象 button, 将 PC13 设置为输入引脚
+	GPIO button(GPIOC, 13, false);
+
+	// 创建 UART 对象 uart, 设置波特率为 115200
+	UART uart(USART2, 115200);
+
+
+	while (1) {
+		if (!button.read()) {
+			led.toggle();
+		}
+
+		uart.sendString("One Second \n\r");
+
+		Timebase::delay(1);
+	}
+}

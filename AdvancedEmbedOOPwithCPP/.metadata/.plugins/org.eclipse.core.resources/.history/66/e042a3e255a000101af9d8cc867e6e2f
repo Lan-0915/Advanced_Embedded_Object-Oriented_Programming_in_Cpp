@@ -1,0 +1,27 @@
+#ifndef TIMEBASE_HPP
+#define TIMEBASE_HPP
+
+#include "stm32f4xx.h"
+
+
+class Timebase {
+private:
+	static volatile uint32_t tickCount;
+
+public:
+	// 初始化系统定时器 (SysTick), 用于实现系统的事件记录功能
+	static void init();
+
+	// 延迟函数（s为单位）
+	static void delay(uint32_t delay);
+
+	// 返回当前系统计数值 (ms为单位)
+	static void getTick();
+
+	// 增加计数器的计数值 (在系统定时器中断内部执行)
+	static void tickIncrement();
+};
+
+
+
+#endif

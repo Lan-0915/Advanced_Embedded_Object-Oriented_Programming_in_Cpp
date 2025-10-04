@@ -1,0 +1,59 @@
+#include "ADXL345.hpp"
+
+
+#define ADXL345_REG_DEVID			(0x00)
+#define ADXL345_DEVICE_ADDR			(0x53)
+#define ADXL345_REG_DATA_FORMAT		(0x31)
+#define ADXL345_REG_POWER_CTL		(0x2D)
+#define ADXL345_REG_DATA_START		(0x32)
+
+#define ADXL345_RANGE_4G			(0x01)
+#define ADXL345_RESET				(0x00)
+#define ADXL345_MEASURE_BIT			(0x08)
+
+#define ADXL345_MULTI_BYTE_ENABLE	0x40
+#define ADXL345_READ_OPERATION		0x80
+
+
+
+
+
+// 构造函数, 用于初始化 ADXL345 传感器
+// spi 参数为 SPI 类型, deviceAddress 参数为设备地址
+ADXL345::ADXL345(SPI& spi, uint32_t deviceAddress = 0x53)
+		: spi(spi), deviceAddress(deviceAddress), accel_x(0), accel_y(0), accel_z(0) {
+
+}
+
+// 初始化 ADXL345 传感器
+void init();
+
+// 读取原始加速度计数据并更新内部变量
+void updateAcceleration();
+
+// 获取 x 轴的原始加速度值
+int16_t getAccelX();
+
+// 获取 y 轴的原始加速度值
+int16_t getAccelY();
+
+// 获取 z 轴的原始加速度值
+int16_t getAccelZ();
+
+// 获取 x 轴的原始加速度 g 单位下的值
+int16_t getAccelXG();
+
+// 获取 y 轴的原始加速度 g 单位下的值
+int16_t getAccelYG();
+
+// 获取 z 轴的原始加速度 g 单位下的值
+int16_t getAccelZG();
+
+
+
+
+
+
+
+
+

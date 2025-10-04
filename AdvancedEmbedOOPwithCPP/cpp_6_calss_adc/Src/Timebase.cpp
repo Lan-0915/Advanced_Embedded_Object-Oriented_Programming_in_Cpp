@@ -1,0 +1,90 @@
+#include "Timebase.hpp"
+
+#define CTRL_ENABLE		(1U<<0)
+#define CTRL_TICKINT	(1U<<1)
+#define CTRL_CLCKSRC	(1U<<2)
+#define CTRL_COUNTFLAG	(1U<<16)
+
+#define ONE_SEC_LOAD	16000000
+#define MAX_DELAY		0xFFFFFFFF
+#define TICK_FREQ		1
+
+
+volatile uint32_t Timebase::tickCount = 0;
+
+
+/**
+ * 初始化系统定时器 (SysTick) 函数, 用于实现系统的事件记录功能
+ * */
+void Timebase::init() {
+	/**
+	 * 初始化 systick 的步骤
+	 * */
+	// 1. 禁用全局中断
+	__disable_irq();
+
+	// 2. 用每秒的时钟周期数来加载计时器
+	SysTick->LOAD = ONE_SEC_LOAD - 1;
+
+	// 3. 清除 systick 当前值寄存器
+	SysTick->VAL = 0;
+
+	// 4. 选择内部时钟源
+	SysTick->CTRL = CTRL_CLCKSRC;
+
+	// 5. 启用中断
+	SysTick->CTRL |= CTRL_TICKINT;
+
+	// 6. 启用 systick
+	SysTick->CTRL |= CTRL_ENABLE;
+
+	// 7. 启用全局中断
+	__enable_irq();
+}
+
+
+
+/**
+ * 延迟函数（s为单位）
+ * */
+void Timebase::delay(uint32_t delay) {
+	uint32_t tickstart = getTick();
+	uint32_t wait = delay;
+
+	if (wait < MAX_DELAY) {
+		wait += TICK_FREQ;
+	}
+
+	while ((getTick() - tickstart) < wait) {}
+}
+
+
+
+/**
+ * 返回当前系统计数值函数 (ms为单位)
+ * */
+uint32_t Timebase::getTick() {
+	__disable_irq();
+	uint32_t currentTick = tickCount;
+	__disable_irq();
+	return currentTick;
+}
+
+
+/**
+ * 增加计数器的计数值函数 (在系统定时器中断内部执行)
+ * */
+void Timebase::tickIncrement() {
+	tickCount += TICK_FREQ;
+}
+
+
+
+/**
+ * 重写 SysTick_Handler (调用 c 函数)
+ * */
+extern "C" void SysTick_Handler(void) {
+	Timebase::tickIncrement();
+}
+
+

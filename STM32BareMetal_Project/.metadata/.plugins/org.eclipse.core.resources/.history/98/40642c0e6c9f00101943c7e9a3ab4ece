@@ -1,0 +1,51 @@
+#include "adc.h"
+#include "stm32f4xx.h"
+
+#define GPIOAEN		(1U<<0)
+
+
+void pal_adc_init(void) {
+	/**
+	 * 配置 ADC GPIO 引脚
+	 */
+	// 1. 启用 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+
+	// 2. 将 PA1 模式设置为模拟模式
+
+
+
+	/**
+	 * 配置 ADC 模块
+	 */
+	// 1. 启用 ADC 模块的时钟访问
+
+
+	// 2. 设置转换序列开始
+
+
+	// 3. 设置转换序列长度
+
+
+	// 4. 启用 ADC 模块
+}
+
+
+void start_conversion(void) {
+	// 启用连续转换
+
+
+	// 开始 AD 转换
+}
+
+
+uint32_t adc_read(void) {
+	// 等待转换完成
+
+
+	// 读取转换后的值
+}
+
+
+
+

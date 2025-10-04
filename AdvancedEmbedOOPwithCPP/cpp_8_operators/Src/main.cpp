@@ -1,0 +1,21 @@
+#include "GPIO.hpp"
+#include "UART.hpp"
+
+
+int main() {
+	// 创建 led, 将 PA5 设置为输出引脚
+	GPIO led(GPIOA, 5, true);
+
+	// 创建 button, 将 PC13 设置为输入引脚
+	GPIO button(GPIOC, 13, false);
+
+	// 创建 uart, 设置波特率为 115200
+	UART uart(USART2, 115200);
+
+	while (1) {
+		if (!button) {
+			led = true;
+			uart.sendString("Butter Pressed \n\r");
+		}
+	}
+}

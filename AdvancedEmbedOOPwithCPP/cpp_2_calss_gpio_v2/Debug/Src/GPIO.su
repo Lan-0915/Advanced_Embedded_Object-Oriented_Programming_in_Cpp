@@ -1,0 +1,5 @@
+../Src/GPIO.cpp:6:1:GPIO::GPIO(GPIO_TypeDef*, uint8_t, bool)	24	static
+../Src/GPIO.cpp:23:6:void GPIO::toggle()	16	static
+../Src/GPIO.cpp:28:6:void GPIO::setLow()	16	static
+../Src/GPIO.cpp:33:6:void GPIO::setHigh()	16	static
+../Src/GPIO.cpp:38:6:bool GPIO::read()	16	static

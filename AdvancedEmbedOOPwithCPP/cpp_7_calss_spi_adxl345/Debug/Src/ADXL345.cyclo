@@ -1,0 +1,11 @@
+../Src/ADXL345.cpp:24:1:ADXL345::ADXL345(SPI&, uint8_t)	1
+../Src/ADXL345.cpp:30:6:void ADXL345::writeRegister(uint8_t, uint8_t)	1
+../Src/ADXL345.cpp:46:6:void ADXL345::readRegister(uint8_t, uint8_t*, uint8_t)	1
+../Src/ADXL345.cpp:66:6:void ADXL345::init()	1
+../Src/ADXL345.cpp:79:6:void ADXL345::updateAcceleration()	1
+../Src/ADXL345.cpp:94:9:int16_t ADXL345::getAccelX()	1
+../Src/ADXL345.cpp:99:9:int16_t ADXL345::getAccelY()	1
+../Src/ADXL345.cpp:104:9:int16_t ADXL345::getAccelZ()	1
+../Src/ADXL345.cpp:109:7:float ADXL345::getAccelXG()	1
+../Src/ADXL345.cpp:114:7:float ADXL345::getAccelYG()	1
+../Src/ADXL345.cpp:119:7:float ADXL345::getAccelZG()	1

@@ -1,0 +1,7 @@
+../Src/SPI.cpp:16:1:SPI::SPI(SPI_TypeDef*, GPIO_TypeDef*, uint8_t)	1
+../Src/SPI.cpp:23:6:void SPI::configureGPIO()	1
+../Src/SPI.cpp:69:6:void SPI::configureSPI()	1
+../Src/SPI.cpp:109:6:void SPI::transmit(uint8_t*, uint32_t)	5
+../Src/SPI.cpp:137:6:void SPI::receive(uint8_t*, uint32_t)	3
+../Src/SPI.cpp:154:6:void SPI::csEnable()	1
+../Src/SPI.cpp:160:6:void SPI::csDisable()	1

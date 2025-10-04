@@ -1,0 +1,19 @@
+#ifndef ADXL345_HPP
+#define ADXL345_HPP
+
+#include "SPI.hpp"
+#include <cstdint>
+
+
+
+class ADXL345 {
+private:
+	SPI& spi;
+	uint32_t deviceAddress;
+
+public:
+};
+
+
+
+#endif

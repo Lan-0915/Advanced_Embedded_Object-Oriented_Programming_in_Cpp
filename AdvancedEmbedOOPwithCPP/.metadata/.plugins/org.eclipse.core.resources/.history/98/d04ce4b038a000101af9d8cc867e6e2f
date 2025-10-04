@@ -1,0 +1,14 @@
+#include "stm32f4xx.h"
+
+
+class GPIO {
+private:
+	GPIO_TypeDef * port;
+	uint8_t pin;
+
+public:
+	// 构造函数
+	GPIO(GPIO_TypeDef * gpioPort, uint8_t gpioPin, bool isOutput = true): port(gpioPort), pin(gpioPin) {
+
+	}
+};

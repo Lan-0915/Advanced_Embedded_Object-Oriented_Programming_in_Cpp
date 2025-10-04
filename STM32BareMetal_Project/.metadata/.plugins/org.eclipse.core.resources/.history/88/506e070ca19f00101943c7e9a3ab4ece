@@ -1,0 +1,24 @@
+#include "i2c.h"
+#include "stm32f4xx.h"
+
+
+
+#define GPIOBEN		(1U<<1)
+
+
+// PB8...SCL
+// PB9...SDA
+
+
+void i2c1_init(void) {
+	// 启用 GPIOB 的时钟访问
+
+
+	// 设置 PB8 PB9 模式为交替功能模式
+	// PA5
+
+	// PA5
+
+
+	// 设置 PB8 PB9 的交替功能类型为 I2C1 (AF4)
+}

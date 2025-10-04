@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include "stm32f4xx.h"
+#include "fpu.h"
+#include "uart.h"
+#include "timebase.h"
+#include "bsp.h"
+#include "adc.h"
+#include "spi.h"
+
+/**
+ * Module:
+ * FPU			// FPUF浮点单元模块
+ * UART			// UART驱动, 在串行终端产生结果
+ * TIMEBASE		// 时间基准, 制造延迟
+ * GPIO (BSP)	// GPIO模块, 打开LED, 来测试输出
+ * ADC
+ * */
+
+
+
+#define GPIOAEN		(10<<0)
+#define PINS		(10<<5)
+#define LED_PIN		PINS
+
+bool btn_state;
+uint32_t sensor_calue;
+
+SPI_HandleTypeDef hspi1;
+
+static void test_spi_init(void);
+
+uint8_t tx_buffer[1] = {0xDE};
+uint8_t rx_buffer[1];
+
+int main() {
+
+	// Enable FPU
+	fpu_enable();
+
+	// 初始化调试 UART
+	debug_uart_init();
+
+	// 初始化时间基准函数
+	timebase_init();
+
+	// 初始化 LED
+	led_init();
+
+	// 初始化按钮
+	button_init();
+
+	// 初始化 ADC
+	pal_adc_init();
+
+	// 开始转换
+	start_conversion();
+
+	// 初始化 SPI
+	test_spi_init();
+
+	spi_transmit(&hspi1, tx_buffer, 1, 10);
+	spi_receive(&hspi1, rx_buffer, 1, 10);
+
+
+	while (1) {
+
+	}
+}
+
+
+
+static void test_spi_init(void) {
+	hspi1.Instance = SPI1;
+	hspi1.Init.Mode = SPI_MODE_MASTER;
+	hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+	hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+	hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+	hspi1.Init.NSS = SPI_NSS_SOFT;
+	hspi1.Init.BuadRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+
+	// 初始化 SPI
+	spi_init(&hspi1);
+}
+
+
+
+

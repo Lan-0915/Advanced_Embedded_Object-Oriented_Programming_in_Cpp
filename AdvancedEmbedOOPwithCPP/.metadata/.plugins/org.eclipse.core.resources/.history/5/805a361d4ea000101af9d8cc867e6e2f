@@ -1,0 +1,22 @@
+#ifndef FPU_HPP
+#define FPU_HPP
+
+#include "stm32f4xx.h"
+
+
+class UART {
+private:
+	USART_TypeDef * uart;
+	uint32_t baudrate;
+
+	void setBuadRate(uint32_t periph_clk) {
+		uart->BRR = ((periph_clk + (baudrate / 2U)) / baudrate);
+	}
+
+public:
+
+}
+
+
+
+#endif

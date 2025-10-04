@@ -1,0 +1,23 @@
+#ifndef GPIO_HPP
+#define GPIO_HPP
+
+#include "stm32f4xx.h"
+
+
+class GPIO {
+private:
+	GPIO_TypeDef * port;
+	uint8_t pin;
+
+public:
+	// 构造函数
+	// isOutput == true 为输出模式, isOutput == false 为输入模式
+	GPIO(GPIO_TypeDef * gpioPort, uint8_t gpioPin, bool isOutput = true);
+
+	// 设置 GPIO 输出状态的操作符
+	// state == true 为高, state == false 为低
+};
+
+
+
+#endif

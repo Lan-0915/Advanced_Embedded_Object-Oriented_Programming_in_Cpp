@@ -1,0 +1,51 @@
+#include "bsp.h"
+#include "stm32f4xx.h"
+
+#define GPIOAEN		(1U<<0)
+#define GPIOCEN		(1U<<2)
+
+#define PINS		(1U<<5)
+#define LED_PIN		PINS
+
+
+
+void led_init(void) {
+	// 启用 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+
+	// 将 PA5 的模式设置为输出模式
+	GPIOA->MODER |=(1U<<10);
+	GPIOA->MODER &=~(1U<<11);
+}
+
+void led_on(void) {
+	// 将 PA5 设置为高电平
+	GPIOA->ODR |=LED_PIN;
+}
+
+void led_off(void) {
+	// 将 PA5 设置为低电平
+	GPIOA->ODR &=~LED_PIN;
+}
+
+
+void button_init(void) {
+	// 启用对 PORTC 的时钟访问
+	RCC->AHB1ENR |= GPIOCEN;
+
+	// 设置 PC13 为输入引脚
+	GPIOC->MODER &=~(1U<<26);
+	GPIOC->MODER &=~(1U<<27);
+}
+
+bool get_btn_state(void) {
+	// 检查按钮是否被按下
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,55 @@
+#include "i2c.h"
+#include "stm32f4xx.h"
+
+
+
+#define GPIOBEN		(1U<<1)
+#define SPI1EN		(1U<<12)
+
+
+// PB8...SCL
+// PB9...SDA
+
+
+void i2c1_init(void) {
+	// 启用 GPIOB 的时钟访问
+
+
+	// 设置 PB8 PB9 模式为交替功能模式
+	// PB8
+
+	// PB9
+
+
+
+	// 设置 PB8 PB9 的输出类型设置为开漏
+	// PB8
+
+	// PB9
+
+
+	// 为 PB8 PB9 启用上拉电阻
+
+
+
+	// 设置 PB8 PB9 的交替功能类型为 I2C1 (AF4)
+	// PB8
+
+	// PB9
+
+
+
+	// 启用对 I2C1 的时钟访问
+
+
+	// 进入复位模式
+
+
+	// 退出复位模式
+
+
+	// 设置外设时钟
+
+
+	// 设置 I2C 为标准模式
+}

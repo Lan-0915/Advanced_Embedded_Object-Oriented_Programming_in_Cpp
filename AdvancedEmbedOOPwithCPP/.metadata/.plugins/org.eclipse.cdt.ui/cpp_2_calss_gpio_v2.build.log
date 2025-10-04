@@ -1,0 +1,21 @@
+18:22:01 **** Build of configuration Debug for project cpp_2_calss_gpio_v2 ****
+make -j32 all 
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"Startup/startup_stm32f411retx.d" -MT"Startup/startup_stm32f411retx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Startup/startup_stm32f411retx.o" "../Startup/startup_stm32f411retx.s"
+arm-none-eabi-g++ "../Src/GPIO.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Include" -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/GPIO.d" -MT"Src/GPIO.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/GPIO.o"
+arm-none-eabi-g++ "../Src/main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Include" -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Include" -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/syscalls.d" -MT"Src/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/syscalls.o"
+arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Include" -I"G:/AdvancedEmbedOOPwithCPP/cpp_2_calss_gpio_v2/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/sysmem.o"
+arm-none-eabi-g++ -o "cpp_2_calss_gpio_v2.elf" @"objects.list"   -mcpu=cortex-m4 -T"G:\AdvancedEmbedOOPwithCPP\cpp_2_calss_gpio_v2\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="cpp_2_calss_gpio_v2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: cpp_2_calss_gpio_v2.elf
+ 
+arm-none-eabi-size  cpp_2_calss_gpio_v2.elf 
+arm-none-eabi-objdump -h -S cpp_2_calss_gpio_v2.elf  > "cpp_2_calss_gpio_v2.list"
+   text	   data	    bss	    dec	    hex	filename
+   1004	      0	   1568	   2572	    a0c	cpp_2_calss_gpio_v2.elf
+Finished building: default.size.stdout
+ 
+Finished building: cpp_2_calss_gpio_v2.list
+ 
+
+18:22:02 Build Finished. 0 errors, 0 warnings. (took 742ms)
+

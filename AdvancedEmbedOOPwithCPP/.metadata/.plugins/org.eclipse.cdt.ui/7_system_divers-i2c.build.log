@@ -1,0 +1,40 @@
+00:55:53 **** Build of configuration Debug for project 7_system_divers-i2c ****
+make -j32 all 
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"Startup/startup_stm32f411retx.d" -MT"Startup/startup_stm32f411retx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Startup/startup_stm32f411retx.o" "../Startup/startup_stm32f411retx.s"
+arm-none-eabi-gcc "../Src/fpu.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/fpu.d" -MT"Src/fpu.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/fpu.o"
+arm-none-eabi-gcc "../Src/i2c.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/i2c.d" -MT"Src/i2c.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/i2c.o"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/syscalls.d" -MT"Src/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/syscalls.o"
+arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/sysmem.o"
+arm-none-eabi-gcc "../Src/timebase.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/timebase.d" -MT"Src/timebase.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/timebase.o"
+arm-none-eabi-gcc "../Src/uart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DNUCLEO_F411RE -DSTM32 -DSTM32F4 -DSTM32F411RETx -DSTM32F411xE -c -I../Inc -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Include" -I"G:/STM32BareMetal_Project/7_system_divers-i2c/chip_headers/CMSIS/Device/ST/STM32F4xx/Include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/uart.d" -MT"Src/uart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/uart.o"
+../Src/i2c.c: In function 'i2c1_byte_read':
+../Src/i2c.c:104:22: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+  104 |         volatile int tmp;
+      |                      ^~~
+../Src/i2c.c: In function 'i2c1_burst_read':
+../Src/i2c.c:162:22: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+  162 |         volatile int tmp;
+      |                      ^~~
+../Src/i2c.c: In function 'i2c1_byte_write':
+../Src/i2c.c:241:22: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+  241 |         volatile int tmp;
+      |                      ^~~
+../Src/i2c.c: In function 'i2c1_burst_write':
+../Src/i2c.c:281:22: warning: variable 'tmp' set but not used [-Wunused-but-set-variable]
+  281 |         volatile int tmp;
+      |                      ^~~
+arm-none-eabi-gcc -o "7_system_divers-i2c.elf" @"objects.list"   -mcpu=cortex-m4 -T"G:\STM32BareMetal_Project\7_system_divers-i2c\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="7_system_divers-i2c.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 7_system_divers-i2c.elf
+ 
+arm-none-eabi-size  7_system_divers-i2c.elf 
+arm-none-eabi-objdump -h -S 7_system_divers-i2c.elf  > "7_system_divers-i2c.list"
+   text	   data	    bss	    dec	    hex	filename
+   5468	     92	   1908	   7468	   1d2c	7_system_divers-i2c.elf
+Finished building: default.size.stdout
+ 
+Finished building: 7_system_divers-i2c.list
+ 
+
+00:57:59 Build Finished. 0 errors, 4 warnings. (took 2m:6s.62ms)
+

@@ -1,0 +1,156 @@
+#include "SPI.hpp"
+
+
+#define GPIOAEN		(1U<<0)
+#define SPI1EN		(1U<<12)
+
+#define SR_TXE		(1U<<1)
+#define SR_RXNE		(1U<<0)
+
+#define SR_BSY		(1U<<7)
+
+
+
+// 构造函数, 用于初始化 SPI
+// spi 参数为 SPI 类型, gpioPort 参数为 chip 选择的 GPIO 端口, csPin 参数为 chip 选择的 GPIO 引脚
+SPI::SPI(SPI_TypeDef * spi, GPIO_TypeDef * gpioPort, uint8_t csPin): spi(spi), gpioPort(gpioPort), csPin(csPin) {
+	configureGPIO();
+	configureSPI();
+}
+
+
+// 配置 GPIO
+void SPI::configureGPIO() {
+	/**
+	 * GPIO 初始化
+	 * */
+	// 1. 启用对 GPIO (A / B / ......) 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+	// ......
+
+	// 2. 设置 PA5 PA6 PA7 模式为交替功能模式
+	// PA5
+	gpioPort->MODER &= ~(1U<<10);
+	gpioPort->MODER |= (1U<<11);
+	// PA6
+	gpioPort->MODER &= ~(1U<<12);
+	gpioPort->MODER |= (1U<<13);
+	// PA7
+	gpioPort->MODER &= ~(1U<<14);
+	gpioPort->MODER |= (1U<<15);
+
+
+	// 3. 设置 PA9 模式为输出 pin 模式
+	gpioPort->MODER |= (1U << (csPin * 2));
+	gpioPort->MODER &= ~(1U << (csPin * 2 + 1));
+
+
+	// 4. 设置 PA5 PA6 PA7 的交替功能类型为 SPI1
+	// PA5
+	gpioPort->AFR[0] |=(1U<<20);
+	gpioPort->AFR[0] &=~(1U<<21);
+	gpioPort->AFR[0] |=(1U<<22);
+	gpioPort->AFR[0] &=~(1U<<23);
+	// PA6
+	gpioPort->AFR[0] |=(1U<<24);
+	gpioPort->AFR[0] &=~(1U<<25);
+	gpioPort->AFR[0] |=(1U<<26);
+	gpioPort->AFR[0] &=~(1U<<27);
+	// PA7
+	gpioPort->AFR[0] |=(1U<<28);
+	gpioPort->AFR[0] &=~(1U<<29);
+	gpioPort->AFR[0] |=(1U<<30);
+	gpioPort->AFR[0] &=~(1U<<31);
+}
+
+
+
+// 配置 SPI
+void SPI::configureSPI() {
+	/**
+	 * SPI 初始化
+	 * */
+	// 1. 启用对 SPI (1 / 2 / ......) 的时钟访问
+	RCC->APB2ENR |= SPI1EN;
+	// ......
+
+	// 2. 将时钟设置为 fPCLK / 4
+	spi->CR1 |= (1U<<3);
+	spi->CR1 &= ~(1U<<4);
+	spi->CR1 &= ~(1U<<5);
+
+	// 3. 设置 CPOL 为 1 和 CPHA 为 1
+	spi->CR1 |= (1U<<0);
+	spi->CR1 |= (1U<<1);
+
+	// 4. 启用全双工模式
+	spi->CR1 &= ~(1U<<10);
+
+	// 5. 设置 MSB (最高有效位)
+	spi->CR1 &= ~(1U<<7);
+
+	// 6. 设置模式为主模式
+	spi->CR1 |= (1U<<2);
+
+	// 7. 设置 8 bit 数据模式
+	spi->CR1 &= ~(1U<<11);
+
+	// 8. 通过设置 SSM = 1 和 SSI = 1 来选择软件从属管理模式
+	spi->CR1 |= (1<<8);
+	spi->CR1 |= (1<<9);
+
+	// 9. 启动 SPI 模块
+	spi->CR1 |= (1<<6);
+}
+
+
+// 启用 chip select (cs) 线路
+void csEnable();
+
+
+
+// 禁用 chip select (cs) 线路
+void csDisable();
+
+
+
+// 通过 SPI 传输数据
+// 第一个参数为传输的数据缓冲区, 第二个参数为传输数据的大小
+void SPI::transmit(uint8_t *data, uint32_t size) {
+	uint32_t i = 0;
+	uint8_t temp;
+
+	while (i < size) {
+		// 等待直到 TXE 被设置
+		while (!(spi->SR & (SR_TXE))) {}
+
+		// 将数据写入数据寄存器
+		spi->DR = data[i];
+
+		i++;
+	}
+
+	// 等待直到 TXE 被设置
+	while (!(spi->SR & (SR_TXE))) {}
+
+	// 等待"忙"标志复位
+	while((spi->SR & (SR_BSY))) {}
+
+	// 清除 OVR 标志
+	temp = spi->DR;
+	temp = spi->SR;
+}
+
+
+
+// 通过 SPI 接收数据
+// 第一个参数为接收的数据缓冲区, 第二个参数为接受数据的大小
+void receive(uint8_t * data, uint32_t size);
+
+
+
+
+
+
+
+

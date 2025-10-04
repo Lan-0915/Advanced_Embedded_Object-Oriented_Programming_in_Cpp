@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;cpp_7_calss_spi_adxl345/Src/ADXL345.CPP&apos; to &apos;ADXL345.cpp&apos;" description="Rename resource &apos;ADXL345.CPP&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Src/ADXL345.CPP" name="ADXL345.cpp" stamp="1759507430650" updateReferences="true"/>
+</session>

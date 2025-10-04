@@ -1,0 +1,44 @@
+#ifndef SPI_HPP
+#define SPI_HPP
+
+#include "stm32f4xx.h"
+#include <cstdint>
+
+
+/**
+ * SPI 类
+ * 包含了 SPI 外围设备的操作
+ * */
+class SPI {
+private:
+	SPI_TypeDef * spi;
+	GPIO_TypeDef * gpioPort;
+	uint8_t csPin;
+
+	void configureGPIO();
+	void configureSPI();
+
+public:
+	// 构造函数, 用于初始化 SPI
+	// spi 参数为 SPI 类型, gpioPort 参数为 chip 选择的 GPIO 端口, csPin 参数为 chip 选择的 GPIO 引脚
+	SPI(SPI_TypeDef * spi, GPIO_TypeDef * gpioPort, uint8_t csPin);
+
+	// 启用 chip select (cs) 线路
+	void csEnable();
+
+	// 禁用 chip select (cs) 线路
+	void csDisable();
+
+	// 通过 SPI 传输数据
+	// 第一个参数为传输的数据缓冲区, 第二个参数为传输数据的大小
+	void transmit(uint8_t * data, uint32_t size);
+
+	// 通过 SPI 接收数据
+	// 第一个参数为接收的数据缓冲区, 第二个参数为接受数据的大小
+	void receive(uint8_t * data, uint32_t size);
+};
+
+
+
+#endif
+

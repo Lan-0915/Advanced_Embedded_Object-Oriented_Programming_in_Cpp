@@ -1,0 +1,280 @@
+#include "i2c.h"
+#include "stm32f4xx.h"
+
+
+
+#define GPIOBEN					(1U<<1)
+#define I2C1EN					(1U<<21)
+
+#define I2C_100KHZ				80	// 0b 0101 0000
+#define SD_MOD_MAX_RISE_TIME	17
+
+#define SR2_BUSY				(1U<<1)
+#define CR1_START				(1U<<8)
+#define SR1_SB					(1U<<0)
+#define SR1_ADDR				(1U<<1)
+#define SR1_TXE					(1U<<7)
+#define CR1_ACK					(1U<<10)
+#define CR1_STOP				(1U<<9)
+#define SR1_RXNE				(1U<<6)
+#define SR1_BTF 				(1U<<2)
+
+
+
+// PB8...SCL
+// PB9...SDA
+
+
+void i2c1_init(void) {
+	/**
+	 * GPIOB 初始化
+	 * */
+	// 1. 启用 GPIOB 的时钟访问
+	RCC->AHB1ENR |= GPIOBEN;
+
+	// 2. 设置 PB8 PB9 模式为交替功能模式
+	// PB8
+	GPIOB->MODER &=~(1U<<16);
+	GPIOB->MODER |=(1U<<17);
+	// PB9
+	GPIOB->MODER &=~(1U<<18);
+	GPIOB->MODER |=(1U<<19);
+
+
+	// 3. 设置 PB8 PB9 的输出类型设置为开漏
+	// PB8
+	GPIOB->OTYPER |=(1U<<8);
+	// PB9
+	GPIOB->OTYPER |=(1U<<9);
+
+
+	// 4. 为 PB8 PB9 启用上拉电阻
+	// PB8
+	GPIOB->PUPDR |=(1U<<16);
+	GPIOB->PUPDR &=~(1U<<17);
+	// PB9
+	GPIOB->PUPDR |=(1U<<18);
+	GPIOB->PUPDR &=~(1U<<19);
+
+
+	// 5. 设置 PB8 PB9 的交替功能类型为 I2C1 (AF4)
+	// PB8
+	GPIOB->AFR[1] &=~(1U<<0);
+	GPIOB->AFR[1] &=~(1U<<1);
+	GPIOB->AFR[1] |=(1U<<2);
+	GPIOB->AFR[1] &=~(1U<<3);
+	// PB9
+	GPIOB->AFR[1] &=~(1U<<4);
+	GPIOB->AFR[1] &=~(1U<<5);
+	GPIOB->AFR[1] |=(1U<<6);
+	GPIOB->AFR[1] &=~(1U<<7);
+
+
+	// 6. 启用对 I2C1 的时钟访问
+	RCC->APB1ENR |= I2C1EN;
+
+
+
+	/**
+	 * 配置 I2C 参数
+	 * */
+	// 1. 进入复位模式
+	I2C1->CR1 |=(1U<<15);
+
+	// 2. 退出复位模式
+	I2C1->CR1 &=~(1U<<15);
+
+	// 3. 设置外设时钟
+	I2C1->CR2 = (1U<<4);	// 16MHz
+
+	// 4. 设置 I2C 为标准模式 100kHz
+	I2C1->CCR = I2C_100KHZ;
+
+	// 5. 设置上升时间
+	I2C1->TRISE = SD_MOD_MAX_RISE_TIME;
+
+	// 6. 启用 I2C 模块
+	I2C1->CR1 |=(1U<<0);
+}
+
+
+
+
+void i2c1_byte_read(char saddr, char maddr, char *data) {
+	volatile int tmp;
+
+	// 等待直到总线不忙
+	while (I2C1->SR2 & (SR2_BUSY)) {}
+
+	// 生成开始
+	I2C1->CR1 |= CR1_START;
+
+	// 等待直到开始标志被设置
+	while (!(I2C1->SR1 & (SR1_SB))) {}
+
+	// 传输 从设备地址 和 写入位
+	I2C1->DR = saddr << 1;
+
+	// 等待地址标志被设置
+	while (!(I2C1->SR1 & (SR1_ADDR))) {}
+
+	// 完成后清除地址标志
+	tmp = I2C1->SR2;
+
+	// 发送内存地址
+	I2C1->DR = maddr;
+
+	// 等待直到发射器为空
+	while (!(I2C1->SR1 & (SR1_TXE))) {}
+
+	// 生成重启信号
+	I2C1->CR1 |= CR1_START;
+
+	// 等待直到启动标志再次被设置
+	while (!(I2C1->SR1 & (SR1_SB))) {}
+
+	// 传输 从设备地址 和 读出位
+	I2C1->DR = saddr << 1 | 1;
+
+	// 等待地址标志被设置
+	while (!(I2C1->SR1 & (SR1_ADDR))) {}
+
+	// 禁用确认
+	I2C1->CR1 &= ~CR1_ACK;
+
+	// 清除地址标志
+	tmp = I2C1->SR2;
+
+	// 接收到数据后生成停止信号
+	I2C1->CR1 |= CR1_STOP;
+
+	// 等待直到 RXNE 标志被设置
+	while (!(I2C1->SR1 & (SR1_RXNE))) {}
+
+	// 从数据寄存器读取数据
+	*data++ = I2C1->DR;
+}
+
+
+
+
+void i2c1_burst_read(char saddr, char maddr, char *data, int n) {
+	volatile int tmp;
+
+	// 等待直到总线不忙
+	while (I2C1->SR2 & (SR2_BUSY)) {}
+
+	// 生成开始
+	I2C1->CR1 |= CR1_START;
+
+	// 等待直到开始标志被设置
+	while (!(I2C1->SR1 & (SR1_SB))) {}
+
+	// 传输 从设备地址 和 写入位
+	I2C1->DR = saddr << 1;
+
+	// 等待地址标志被设置
+	while (!(I2C1->SR1 & (SR1_ADDR))) {}
+
+	// 完成后清除地址标志
+	tmp = I2C1->SR2;
+
+	// 发送内存地址
+	I2C1->DR = maddr;
+
+	// 等待直到发射器为空
+	while (!(I2C1->SR1 & (SR1_TXE))) {}
+
+	// 生成重启信号
+	I2C1->CR1 |= CR1_START;
+
+	// 等待直到启动标志再次被设置
+	while (!(I2C1->SR1 & (SR1_SB))) {}
+
+	// 传输 从设备地址 和 读出位
+	I2C1->DR = saddr << 1 | 1;
+
+	// 等待地址标志被设置
+	while (!(I2C1->SR1 & (SR1_ADDR))) {}
+
+	// 清除地址标志
+	tmp = I2C1->SR2;
+
+	// 启用确认
+	I2C1->CR1 |= CR1_ACK;
+
+
+	while (n > 0) {
+		if (n == 1) {
+
+			// 禁用确认
+			I2C1->CR1 &= ~CR1_ACK;
+
+			// 接收到数据后生成停止信号
+			I2C1->CR1 |= CR1_STOP;
+
+			// 等待直到 RXNE 标志被设置
+			while (!(I2C1->SR1 & (SR1_RXNE))) {}
+
+			// 从数据寄存器读取数据
+			*data++ = I2C1->DR;
+
+			break;
+
+		} else {
+
+			// 等待直到 RXNE 标志被设置
+			while (!(I2C1->SR1 & (SR1_RXNE))) {}
+
+			// 从数据寄存器读取数据
+			*data++ = I2C1->DR;
+
+			n--;
+		}
+	}
+}
+
+
+
+
+void i2c1_byte_write(char saddr, char maddr, char data) {
+	volatile int tmp;
+
+	// 等待直到总线不忙
+	while (I2C1->SR2 & (SR2_BUSY)) {}
+
+	// 生成开始
+	I2C1->CR1 |= CR1_START;
+
+	// 等待直到开始标志被设置
+	while (!(I2C1->SR1 & (SR1_SB))) {}
+
+	// 传输 从设备地址 和 写入位
+	I2C1->DR = saddr << 1;
+
+	// 等待地址标志被设置
+	while (!(I2C1->SR1 & (SR1_ADDR))) {}
+
+	// 完成后清除地址标志
+	tmp = I2C1->SR2;
+
+	// 发送内存地址
+	I2C1->DR = maddr;
+
+	// 等待直到发射器为空
+	while (!(I2C1->SR1 & (SR1_TXE))) {}
+
+	// 发送数据
+	I2C1->DR = data;
+
+	// 等待直到发射器完成
+	while (!(I2C1->SR1 & (SR1_BTF))) {}
+
+	// 生成停止信号
+	I2C1->CR1 |= CR1_STOP;
+}
+
+
+
+
+

@@ -1,0 +1,1815 @@
+
+6_system_divers-spi.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000198  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00000a50  08000198  08000198  00001198  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  08000be8  08000be8  00002004  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  08000be8  08000be8  00002004  2**0
+                  CONTENTS, READONLY
+  4 .ARM          00000000  08000be8  08000be8  00002004  2**0
+                  CONTENTS, READONLY
+  5 .preinit_array 00000000  08000be8  08000be8  00002004  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000be8  08000be8  00001be8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  08000bec  08000bec  00001bec  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         00000004  20000000  08000bf0  00002000  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          0000006c  20000004  08000bf4  00002004  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000600  20000070  08000bf4  00002070  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000030  00000000  00000000  00002004  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   000019f8  00000000  00000000  00002034  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_abbrev 00000846  00000000  00000000  00003a2c  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_aranges 00000198  00000000  00000000  00004278  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_rnglists 0000010f  00000000  00000000  00004410  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_macro  0000f19c  00000000  00000000  0000451f  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_line   00002e8f  00000000  00000000  000136bb  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    0005420e  00000000  00000000  0001654a  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .comment      00000043  00000000  00000000  0006a758  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  000003d8  00000000  00000000  0006a79c  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 21 .debug_line_str 00000057  00000000  00000000  0006ab74  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000198 <__do_global_dtors_aux>:
+ 8000198:	b510      	push	{r4, lr}
+ 800019a:	4c05      	ldr	r4, [pc, #20]	@ (80001b0 <__do_global_dtors_aux+0x18>)
+ 800019c:	7823      	ldrb	r3, [r4, #0]
+ 800019e:	b933      	cbnz	r3, 80001ae <__do_global_dtors_aux+0x16>
+ 80001a0:	4b04      	ldr	r3, [pc, #16]	@ (80001b4 <__do_global_dtors_aux+0x1c>)
+ 80001a2:	b113      	cbz	r3, 80001aa <__do_global_dtors_aux+0x12>
+ 80001a4:	4804      	ldr	r0, [pc, #16]	@ (80001b8 <__do_global_dtors_aux+0x20>)
+ 80001a6:	f3af 8000 	nop.w
+ 80001aa:	2301      	movs	r3, #1
+ 80001ac:	7023      	strb	r3, [r4, #0]
+ 80001ae:	bd10      	pop	{r4, pc}
+ 80001b0:	20000004 	.word	0x20000004
+ 80001b4:	00000000 	.word	0x00000000
+ 80001b8:	08000bd0 	.word	0x08000bd0
+
+080001bc <frame_dummy>:
+ 80001bc:	b508      	push	{r3, lr}
+ 80001be:	4b03      	ldr	r3, [pc, #12]	@ (80001cc <frame_dummy+0x10>)
+ 80001c0:	b11b      	cbz	r3, 80001ca <frame_dummy+0xe>
+ 80001c2:	4903      	ldr	r1, [pc, #12]	@ (80001d0 <frame_dummy+0x14>)
+ 80001c4:	4803      	ldr	r0, [pc, #12]	@ (80001d4 <frame_dummy+0x18>)
+ 80001c6:	f3af 8000 	nop.w
+ 80001ca:	bd08      	pop	{r3, pc}
+ 80001cc:	00000000 	.word	0x00000000
+ 80001d0:	20000008 	.word	0x20000008
+ 80001d4:	08000bd0 	.word	0x08000bd0
+
+080001d8 <pal_adc_init>:
+#define CR2_CONT		(1U<<1)
+#define CR2_SWSTART		(1U<<30)
+#define SR_EOC			(1U<<1)
+
+
+void pal_adc_init(void) {
+ 80001d8:	b480      	push	{r7}
+ 80001da:	af00      	add	r7, sp, #0
+	/**
+	 * 配置 ADC GPIO 引脚
+	 */
+	// 1. 启用 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+ 80001dc:	4b14      	ldr	r3, [pc, #80]	@ (8000230 <pal_adc_init+0x58>)
+ 80001de:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 80001e0:	4a13      	ldr	r2, [pc, #76]	@ (8000230 <pal_adc_init+0x58>)
+ 80001e2:	f043 0301 	orr.w	r3, r3, #1
+ 80001e6:	6313      	str	r3, [r2, #48]	@ 0x30
+
+	// 2. 将 PA1 模式设置为模拟模式
+	GPIOA->MODER |=(1U<<2);
+ 80001e8:	4b12      	ldr	r3, [pc, #72]	@ (8000234 <pal_adc_init+0x5c>)
+ 80001ea:	681b      	ldr	r3, [r3, #0]
+ 80001ec:	4a11      	ldr	r2, [pc, #68]	@ (8000234 <pal_adc_init+0x5c>)
+ 80001ee:	f043 0304 	orr.w	r3, r3, #4
+ 80001f2:	6013      	str	r3, [r2, #0]
+	GPIOA->MODER |=(1U<<3);
+ 80001f4:	4b0f      	ldr	r3, [pc, #60]	@ (8000234 <pal_adc_init+0x5c>)
+ 80001f6:	681b      	ldr	r3, [r3, #0]
+ 80001f8:	4a0e      	ldr	r2, [pc, #56]	@ (8000234 <pal_adc_init+0x5c>)
+ 80001fa:	f043 0308 	orr.w	r3, r3, #8
+ 80001fe:	6013      	str	r3, [r2, #0]
+
+	/**
+	 * 配置 ADC 模块
+	 */
+	// 1. 启用 ADC 模块的时钟访问
+	RCC->APB2ENR |= ADC1EN;
+ 8000200:	4b0b      	ldr	r3, [pc, #44]	@ (8000230 <pal_adc_init+0x58>)
+ 8000202:	6c5b      	ldr	r3, [r3, #68]	@ 0x44
+ 8000204:	4a0a      	ldr	r2, [pc, #40]	@ (8000230 <pal_adc_init+0x58>)
+ 8000206:	f443 7380 	orr.w	r3, r3, #256	@ 0x100
+ 800020a:	6453      	str	r3, [r2, #68]	@ 0x44
+
+	// 2. 设置转换序列开始
+	ADC1->SQR3 = ADC_CH1;
+ 800020c:	4b0a      	ldr	r3, [pc, #40]	@ (8000238 <pal_adc_init+0x60>)
+ 800020e:	2201      	movs	r2, #1
+ 8000210:	635a      	str	r2, [r3, #52]	@ 0x34
+
+	// 3. 设置转换序列长度
+	ADC1->SQR1 = AD_SEQ_LEN_1;
+ 8000212:	4b09      	ldr	r3, [pc, #36]	@ (8000238 <pal_adc_init+0x60>)
+ 8000214:	2200      	movs	r2, #0
+ 8000216:	62da      	str	r2, [r3, #44]	@ 0x2c
+
+	// 4. 启用 ADC 模块
+	ADC1->CR2 |= CR2_ADCON;
+ 8000218:	4b07      	ldr	r3, [pc, #28]	@ (8000238 <pal_adc_init+0x60>)
+ 800021a:	689b      	ldr	r3, [r3, #8]
+ 800021c:	4a06      	ldr	r2, [pc, #24]	@ (8000238 <pal_adc_init+0x60>)
+ 800021e:	f043 0301 	orr.w	r3, r3, #1
+ 8000222:	6093      	str	r3, [r2, #8]
+}
+ 8000224:	bf00      	nop
+ 8000226:	46bd      	mov	sp, r7
+ 8000228:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800022c:	4770      	bx	lr
+ 800022e:	bf00      	nop
+ 8000230:	40023800 	.word	0x40023800
+ 8000234:	40020000 	.word	0x40020000
+ 8000238:	40012000 	.word	0x40012000
+
+0800023c <start_conversion>:
+
+
+void start_conversion(void) {
+ 800023c:	b480      	push	{r7}
+ 800023e:	af00      	add	r7, sp, #0
+	// 启用连续转换
+	ADC1->CR2 |= CR2_CONT;
+ 8000240:	4b08      	ldr	r3, [pc, #32]	@ (8000264 <start_conversion+0x28>)
+ 8000242:	689b      	ldr	r3, [r3, #8]
+ 8000244:	4a07      	ldr	r2, [pc, #28]	@ (8000264 <start_conversion+0x28>)
+ 8000246:	f043 0302 	orr.w	r3, r3, #2
+ 800024a:	6093      	str	r3, [r2, #8]
+
+	// 开始 AD 转换
+	ADC1->CR2 |= CR2_SWSTART;
+ 800024c:	4b05      	ldr	r3, [pc, #20]	@ (8000264 <start_conversion+0x28>)
+ 800024e:	689b      	ldr	r3, [r3, #8]
+ 8000250:	4a04      	ldr	r2, [pc, #16]	@ (8000264 <start_conversion+0x28>)
+ 8000252:	f043 4380 	orr.w	r3, r3, #1073741824	@ 0x40000000
+ 8000256:	6093      	str	r3, [r2, #8]
+}
+ 8000258:	bf00      	nop
+ 800025a:	46bd      	mov	sp, r7
+ 800025c:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000260:	4770      	bx	lr
+ 8000262:	bf00      	nop
+ 8000264:	40012000 	.word	0x40012000
+
+08000268 <led_init>:
+#define PIN13		(1U<<13)
+#define BTN_PIN		PIN13
+
+
+
+void led_init(void) {
+ 8000268:	b480      	push	{r7}
+ 800026a:	af00      	add	r7, sp, #0
+	// 启用 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+ 800026c:	4b0b      	ldr	r3, [pc, #44]	@ (800029c <led_init+0x34>)
+ 800026e:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 8000270:	4a0a      	ldr	r2, [pc, #40]	@ (800029c <led_init+0x34>)
+ 8000272:	f043 0301 	orr.w	r3, r3, #1
+ 8000276:	6313      	str	r3, [r2, #48]	@ 0x30
+
+	// 将 PA5 的模式设置为输出模式
+	GPIOA->MODER |=(1U<<10);
+ 8000278:	4b09      	ldr	r3, [pc, #36]	@ (80002a0 <led_init+0x38>)
+ 800027a:	681b      	ldr	r3, [r3, #0]
+ 800027c:	4a08      	ldr	r2, [pc, #32]	@ (80002a0 <led_init+0x38>)
+ 800027e:	f443 6380 	orr.w	r3, r3, #1024	@ 0x400
+ 8000282:	6013      	str	r3, [r2, #0]
+	GPIOA->MODER &=~(1U<<11);
+ 8000284:	4b06      	ldr	r3, [pc, #24]	@ (80002a0 <led_init+0x38>)
+ 8000286:	681b      	ldr	r3, [r3, #0]
+ 8000288:	4a05      	ldr	r2, [pc, #20]	@ (80002a0 <led_init+0x38>)
+ 800028a:	f423 6300 	bic.w	r3, r3, #2048	@ 0x800
+ 800028e:	6013      	str	r3, [r2, #0]
+}
+ 8000290:	bf00      	nop
+ 8000292:	46bd      	mov	sp, r7
+ 8000294:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000298:	4770      	bx	lr
+ 800029a:	bf00      	nop
+ 800029c:	40023800 	.word	0x40023800
+ 80002a0:	40020000 	.word	0x40020000
+
+080002a4 <button_init>:
+	GPIOA->ODR &=~LED_PIN;
+}
+
+
+
+void button_init(void) {
+ 80002a4:	b480      	push	{r7}
+ 80002a6:	af00      	add	r7, sp, #0
+	// 启用对 PORTC 的时钟访问
+	RCC->AHB1ENR |= GPIOCEN;
+ 80002a8:	4b0b      	ldr	r3, [pc, #44]	@ (80002d8 <button_init+0x34>)
+ 80002aa:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 80002ac:	4a0a      	ldr	r2, [pc, #40]	@ (80002d8 <button_init+0x34>)
+ 80002ae:	f043 0304 	orr.w	r3, r3, #4
+ 80002b2:	6313      	str	r3, [r2, #48]	@ 0x30
+
+	// 设置 PC13 为输入引脚
+	GPIOC->MODER &=~(1U<<26);
+ 80002b4:	4b09      	ldr	r3, [pc, #36]	@ (80002dc <button_init+0x38>)
+ 80002b6:	681b      	ldr	r3, [r3, #0]
+ 80002b8:	4a08      	ldr	r2, [pc, #32]	@ (80002dc <button_init+0x38>)
+ 80002ba:	f023 6380 	bic.w	r3, r3, #67108864	@ 0x4000000
+ 80002be:	6013      	str	r3, [r2, #0]
+	GPIOC->MODER &=~(1U<<27);
+ 80002c0:	4b06      	ldr	r3, [pc, #24]	@ (80002dc <button_init+0x38>)
+ 80002c2:	681b      	ldr	r3, [r3, #0]
+ 80002c4:	4a05      	ldr	r2, [pc, #20]	@ (80002dc <button_init+0x38>)
+ 80002c6:	f023 6300 	bic.w	r3, r3, #134217728	@ 0x8000000
+ 80002ca:	6013      	str	r3, [r2, #0]
+}
+ 80002cc:	bf00      	nop
+ 80002ce:	46bd      	mov	sp, r7
+ 80002d0:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80002d4:	4770      	bx	lr
+ 80002d6:	bf00      	nop
+ 80002d8:	40023800 	.word	0x40023800
+ 80002dc:	40020800 	.word	0x40020800
+
+080002e0 <fpu_enable>:
+#include "stm32f4xx.h"
+
+void fpu_enable(void) {
+ 80002e0:	b480      	push	{r7}
+ 80002e2:	af00      	add	r7, sp, #0
+	// 启用浮点单元（Enable CP10 and CP11）
+	SCB->CPACR |= (1<<20);
+ 80002e4:	4b12      	ldr	r3, [pc, #72]	@ (8000330 <fpu_enable+0x50>)
+ 80002e6:	f8d3 3088 	ldr.w	r3, [r3, #136]	@ 0x88
+ 80002ea:	4a11      	ldr	r2, [pc, #68]	@ (8000330 <fpu_enable+0x50>)
+ 80002ec:	f443 1380 	orr.w	r3, r3, #1048576	@ 0x100000
+ 80002f0:	f8c2 3088 	str.w	r3, [r2, #136]	@ 0x88
+	SCB->CPACR |= (1<<21);
+ 80002f4:	4b0e      	ldr	r3, [pc, #56]	@ (8000330 <fpu_enable+0x50>)
+ 80002f6:	f8d3 3088 	ldr.w	r3, [r3, #136]	@ 0x88
+ 80002fa:	4a0d      	ldr	r2, [pc, #52]	@ (8000330 <fpu_enable+0x50>)
+ 80002fc:	f443 1300 	orr.w	r3, r3, #2097152	@ 0x200000
+ 8000300:	f8c2 3088 	str.w	r3, [r2, #136]	@ 0x88
+	SCB->CPACR |= (1<<22);
+ 8000304:	4b0a      	ldr	r3, [pc, #40]	@ (8000330 <fpu_enable+0x50>)
+ 8000306:	f8d3 3088 	ldr.w	r3, [r3, #136]	@ 0x88
+ 800030a:	4a09      	ldr	r2, [pc, #36]	@ (8000330 <fpu_enable+0x50>)
+ 800030c:	f443 0380 	orr.w	r3, r3, #4194304	@ 0x400000
+ 8000310:	f8c2 3088 	str.w	r3, [r2, #136]	@ 0x88
+	SCB->CPACR |= (1<<23);
+ 8000314:	4b06      	ldr	r3, [pc, #24]	@ (8000330 <fpu_enable+0x50>)
+ 8000316:	f8d3 3088 	ldr.w	r3, [r3, #136]	@ 0x88
+ 800031a:	4a05      	ldr	r2, [pc, #20]	@ (8000330 <fpu_enable+0x50>)
+ 800031c:	f443 0300 	orr.w	r3, r3, #8388608	@ 0x800000
+ 8000320:	f8c2 3088 	str.w	r3, [r2, #136]	@ 0x88
+}
+ 8000324:	bf00      	nop
+ 8000326:	46bd      	mov	sp, r7
+ 8000328:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800032c:	4770      	bx	lr
+ 800032e:	bf00      	nop
+ 8000330:	e000ed00 	.word	0xe000ed00
+
+08000334 <main>:
+static void test_spi_init(void);
+
+uint8_t tx_buffer[1] = {0xDE};
+uint8_t rx_buffer[1];
+
+int main() {
+ 8000334:	b580      	push	{r7, lr}
+ 8000336:	af00      	add	r7, sp, #0
+
+	// Enable FPU
+	fpu_enable();
+ 8000338:	f7ff ffd2 	bl	80002e0 <fpu_enable>
+
+	// 初始化调试 UART
+	debug_uart_init();
+ 800033c:	f000 fb88 	bl	8000a50 <debug_uart_init>
+
+	// 初始化时间基准函数
+	timebase_init();
+ 8000340:	f000 fb5c 	bl	80009fc <timebase_init>
+
+	// 初始化 LED
+	led_init();
+ 8000344:	f7ff ff90 	bl	8000268 <led_init>
+
+	// 初始化按钮
+	button_init();
+ 8000348:	f7ff ffac 	bl	80002a4 <button_init>
+
+	// 初始化 ADC
+	pal_adc_init();
+ 800034c:	f7ff ff44 	bl	80001d8 <pal_adc_init>
+
+	// 开始转换
+	start_conversion();
+ 8000350:	f7ff ff74 	bl	800023c <start_conversion>
+
+	// 初始化 SPI
+	test_spi_init();
+ 8000354:	f000 f814 	bl	8000380 <test_spi_init>
+
+	spi_transmit(&hspi1, tx_buffer, 1, 10);
+ 8000358:	230a      	movs	r3, #10
+ 800035a:	2201      	movs	r2, #1
+ 800035c:	4905      	ldr	r1, [pc, #20]	@ (8000374 <main+0x40>)
+ 800035e:	4806      	ldr	r0, [pc, #24]	@ (8000378 <main+0x44>)
+ 8000360:	f000 f926 	bl	80005b0 <spi_transmit>
+	spi_receive(&hspi1, rx_buffer, 1, 10);
+ 8000364:	230a      	movs	r3, #10
+ 8000366:	2201      	movs	r2, #1
+ 8000368:	4904      	ldr	r1, [pc, #16]	@ (800037c <main+0x48>)
+ 800036a:	4803      	ldr	r0, [pc, #12]	@ (8000378 <main+0x44>)
+ 800036c:	f000 fa4a 	bl	8000804 <spi_receive>
+
+
+	while (1) {
+ 8000370:	bf00      	nop
+ 8000372:	e7fd      	b.n	8000370 <main+0x3c>
+ 8000374:	20000000 	.word	0x20000000
+ 8000378:	20000020 	.word	0x20000020
+ 800037c:	20000064 	.word	0x20000064
+
+08000380 <test_spi_init>:
+	}
+}
+
+
+
+static void test_spi_init(void) {
+ 8000380:	b580      	push	{r7, lr}
+ 8000382:	af00      	add	r7, sp, #0
+	hspi1.Instance = SPI1;
+ 8000384:	4b12      	ldr	r3, [pc, #72]	@ (80003d0 <test_spi_init+0x50>)
+ 8000386:	4a13      	ldr	r2, [pc, #76]	@ (80003d4 <test_spi_init+0x54>)
+ 8000388:	601a      	str	r2, [r3, #0]
+	hspi1.Init.Mode = SPI_MODE_MASTER;
+ 800038a:	4b11      	ldr	r3, [pc, #68]	@ (80003d0 <test_spi_init+0x50>)
+ 800038c:	f44f 7282 	mov.w	r2, #260	@ 0x104
+ 8000390:	605a      	str	r2, [r3, #4]
+	hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+ 8000392:	4b0f      	ldr	r3, [pc, #60]	@ (80003d0 <test_spi_init+0x50>)
+ 8000394:	2200      	movs	r2, #0
+ 8000396:	609a      	str	r2, [r3, #8]
+	hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+ 8000398:	4b0d      	ldr	r3, [pc, #52]	@ (80003d0 <test_spi_init+0x50>)
+ 800039a:	2200      	movs	r2, #0
+ 800039c:	60da      	str	r2, [r3, #12]
+	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+ 800039e:	4b0c      	ldr	r3, [pc, #48]	@ (80003d0 <test_spi_init+0x50>)
+ 80003a0:	2200      	movs	r2, #0
+ 80003a2:	611a      	str	r2, [r3, #16]
+	hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+ 80003a4:	4b0a      	ldr	r3, [pc, #40]	@ (80003d0 <test_spi_init+0x50>)
+ 80003a6:	2200      	movs	r2, #0
+ 80003a8:	615a      	str	r2, [r3, #20]
+	hspi1.Init.NSS = SPI_NSS_SOFT;
+ 80003aa:	4b09      	ldr	r3, [pc, #36]	@ (80003d0 <test_spi_init+0x50>)
+ 80003ac:	f44f 7200 	mov.w	r2, #512	@ 0x200
+ 80003b0:	619a      	str	r2, [r3, #24]
+	hspi1.Init.BuadRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+ 80003b2:	4b07      	ldr	r3, [pc, #28]	@ (80003d0 <test_spi_init+0x50>)
+ 80003b4:	2208      	movs	r2, #8
+ 80003b6:	61da      	str	r2, [r3, #28]
+	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+ 80003b8:	4b05      	ldr	r3, [pc, #20]	@ (80003d0 <test_spi_init+0x50>)
+ 80003ba:	2200      	movs	r2, #0
+ 80003bc:	621a      	str	r2, [r3, #32]
+	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+ 80003be:	4b04      	ldr	r3, [pc, #16]	@ (80003d0 <test_spi_init+0x50>)
+ 80003c0:	2200      	movs	r2, #0
+ 80003c2:	629a      	str	r2, [r3, #40]	@ 0x28
+
+	// 初始化 SPI
+	spi_init(&hspi1);
+ 80003c4:	4802      	ldr	r0, [pc, #8]	@ (80003d0 <test_spi_init+0x50>)
+ 80003c6:	f000 f88b 	bl	80004e0 <spi_init>
+}
+ 80003ca:	bf00      	nop
+ 80003cc:	bd80      	pop	{r7, pc}
+ 80003ce:	bf00      	nop
+ 80003d0:	20000020 	.word	0x20000020
+ 80003d4:	40013000 	.word	0x40013000
+
+080003d8 <spi1_gpio_init>:
+
+#define GPIOAEN		(1U<<0)
+#define SPI1EN		(1U<<12)
+
+
+void spi1_gpio_init(void) {
+ 80003d8:	b480      	push	{r7}
+ 80003da:	af00      	add	r7, sp, #0
+	// 启用对 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+ 80003dc:	4b3e      	ldr	r3, [pc, #248]	@ (80004d8 <spi1_gpio_init+0x100>)
+ 80003de:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 80003e0:	4a3d      	ldr	r2, [pc, #244]	@ (80004d8 <spi1_gpio_init+0x100>)
+ 80003e2:	f043 0301 	orr.w	r3, r3, #1
+ 80003e6:	6313      	str	r3, [r2, #48]	@ 0x30
+
+	// 设置 PA5 PA6 PA7 模式为交替功能模式
+	// PA5
+	GPIOA->MODER &=~(1U<<10);
+ 80003e8:	4b3c      	ldr	r3, [pc, #240]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80003ea:	681b      	ldr	r3, [r3, #0]
+ 80003ec:	4a3b      	ldr	r2, [pc, #236]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80003ee:	f423 6380 	bic.w	r3, r3, #1024	@ 0x400
+ 80003f2:	6013      	str	r3, [r2, #0]
+	GPIOA->MODER |=(1U<<11);
+ 80003f4:	4b39      	ldr	r3, [pc, #228]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80003f6:	681b      	ldr	r3, [r3, #0]
+ 80003f8:	4a38      	ldr	r2, [pc, #224]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80003fa:	f443 6300 	orr.w	r3, r3, #2048	@ 0x800
+ 80003fe:	6013      	str	r3, [r2, #0]
+	// PA6
+	GPIOA->MODER &=~(1U<<12);
+ 8000400:	4b36      	ldr	r3, [pc, #216]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000402:	681b      	ldr	r3, [r3, #0]
+ 8000404:	4a35      	ldr	r2, [pc, #212]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000406:	f423 5380 	bic.w	r3, r3, #4096	@ 0x1000
+ 800040a:	6013      	str	r3, [r2, #0]
+	GPIOA->MODER |=(1U<<13);
+ 800040c:	4b33      	ldr	r3, [pc, #204]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800040e:	681b      	ldr	r3, [r3, #0]
+ 8000410:	4a32      	ldr	r2, [pc, #200]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000412:	f443 5300 	orr.w	r3, r3, #8192	@ 0x2000
+ 8000416:	6013      	str	r3, [r2, #0]
+	// PA7
+	GPIOA->MODER &=~(1U<<17);
+ 8000418:	4b30      	ldr	r3, [pc, #192]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800041a:	681b      	ldr	r3, [r3, #0]
+ 800041c:	4a2f      	ldr	r2, [pc, #188]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800041e:	f423 3300 	bic.w	r3, r3, #131072	@ 0x20000
+ 8000422:	6013      	str	r3, [r2, #0]
+	GPIOA->MODER |=(1U<<15);
+ 8000424:	4b2d      	ldr	r3, [pc, #180]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000426:	681b      	ldr	r3, [r3, #0]
+ 8000428:	4a2c      	ldr	r2, [pc, #176]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800042a:	f443 4300 	orr.w	r3, r3, #32768	@ 0x8000
+ 800042e:	6013      	str	r3, [r2, #0]
+
+
+	// 设置 PA5 PA6 PA7 的交替功能类型输入为 SPI1
+	// PA5
+	GPIOA->AFR[0] |=(1U<<20);
+ 8000430:	4b2a      	ldr	r3, [pc, #168]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000432:	6a1b      	ldr	r3, [r3, #32]
+ 8000434:	4a29      	ldr	r2, [pc, #164]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000436:	f443 1380 	orr.w	r3, r3, #1048576	@ 0x100000
+ 800043a:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] &=~(1U<<21);
+ 800043c:	4b27      	ldr	r3, [pc, #156]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800043e:	6a1b      	ldr	r3, [r3, #32]
+ 8000440:	4a26      	ldr	r2, [pc, #152]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000442:	f423 1300 	bic.w	r3, r3, #2097152	@ 0x200000
+ 8000446:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] |=(1U<<22);
+ 8000448:	4b24      	ldr	r3, [pc, #144]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800044a:	6a1b      	ldr	r3, [r3, #32]
+ 800044c:	4a23      	ldr	r2, [pc, #140]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800044e:	f443 0380 	orr.w	r3, r3, #4194304	@ 0x400000
+ 8000452:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] &=~(1U<<23);
+ 8000454:	4b21      	ldr	r3, [pc, #132]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000456:	6a1b      	ldr	r3, [r3, #32]
+ 8000458:	4a20      	ldr	r2, [pc, #128]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800045a:	f423 0300 	bic.w	r3, r3, #8388608	@ 0x800000
+ 800045e:	6213      	str	r3, [r2, #32]
+	// PA6
+	GPIOA->AFR[0] |=(1U<<24);
+ 8000460:	4b1e      	ldr	r3, [pc, #120]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000462:	6a1b      	ldr	r3, [r3, #32]
+ 8000464:	4a1d      	ldr	r2, [pc, #116]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000466:	f043 7380 	orr.w	r3, r3, #16777216	@ 0x1000000
+ 800046a:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] &=~(1U<<25);
+ 800046c:	4b1b      	ldr	r3, [pc, #108]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800046e:	6a1b      	ldr	r3, [r3, #32]
+ 8000470:	4a1a      	ldr	r2, [pc, #104]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000472:	f023 7300 	bic.w	r3, r3, #33554432	@ 0x2000000
+ 8000476:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] |=(1U<<26);
+ 8000478:	4b18      	ldr	r3, [pc, #96]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800047a:	6a1b      	ldr	r3, [r3, #32]
+ 800047c:	4a17      	ldr	r2, [pc, #92]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800047e:	f043 6380 	orr.w	r3, r3, #67108864	@ 0x4000000
+ 8000482:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] &=~(1U<<27);
+ 8000484:	4b15      	ldr	r3, [pc, #84]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000486:	6a1b      	ldr	r3, [r3, #32]
+ 8000488:	4a14      	ldr	r2, [pc, #80]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800048a:	f023 6300 	bic.w	r3, r3, #134217728	@ 0x8000000
+ 800048e:	6213      	str	r3, [r2, #32]
+	// PA7
+	GPIOA->AFR[0] |=(1U<<28);
+ 8000490:	4b12      	ldr	r3, [pc, #72]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000492:	6a1b      	ldr	r3, [r3, #32]
+ 8000494:	4a11      	ldr	r2, [pc, #68]	@ (80004dc <spi1_gpio_init+0x104>)
+ 8000496:	f043 5380 	orr.w	r3, r3, #268435456	@ 0x10000000
+ 800049a:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] &=~(1U<<29);
+ 800049c:	4b0f      	ldr	r3, [pc, #60]	@ (80004dc <spi1_gpio_init+0x104>)
+ 800049e:	6a1b      	ldr	r3, [r3, #32]
+ 80004a0:	4a0e      	ldr	r2, [pc, #56]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80004a2:	f023 5300 	bic.w	r3, r3, #536870912	@ 0x20000000
+ 80004a6:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] |=(1U<<30);
+ 80004a8:	4b0c      	ldr	r3, [pc, #48]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80004aa:	6a1b      	ldr	r3, [r3, #32]
+ 80004ac:	4a0b      	ldr	r2, [pc, #44]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80004ae:	f043 4380 	orr.w	r3, r3, #1073741824	@ 0x40000000
+ 80004b2:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] &=~(1U<<31);
+ 80004b4:	4b09      	ldr	r3, [pc, #36]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80004b6:	6a1b      	ldr	r3, [r3, #32]
+ 80004b8:	4a08      	ldr	r2, [pc, #32]	@ (80004dc <spi1_gpio_init+0x104>)
+ 80004ba:	f023 4300 	bic.w	r3, r3, #2147483648	@ 0x80000000
+ 80004be:	6213      	str	r3, [r2, #32]
+
+
+	// 启用对 SPI1 的时钟访问
+	RCC->AHB1ENR |= SPI1EN;
+ 80004c0:	4b05      	ldr	r3, [pc, #20]	@ (80004d8 <spi1_gpio_init+0x100>)
+ 80004c2:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 80004c4:	4a04      	ldr	r2, [pc, #16]	@ (80004d8 <spi1_gpio_init+0x100>)
+ 80004c6:	f443 5380 	orr.w	r3, r3, #4096	@ 0x1000
+ 80004ca:	6313      	str	r3, [r2, #48]	@ 0x30
+}
+ 80004cc:	bf00      	nop
+ 80004ce:	46bd      	mov	sp, r7
+ 80004d0:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80004d4:	4770      	bx	lr
+ 80004d6:	bf00      	nop
+ 80004d8:	40023800 	.word	0x40023800
+ 80004dc:	40020000 	.word	0x40020000
+
+080004e0 <spi_init>:
+
+
+
+StatusTypeDef spi_init(SPI_HandleTypeDef *hspi) {
+ 80004e0:	b580      	push	{r7, lr}
+ 80004e2:	b082      	sub	sp, #8
+ 80004e4:	af00      	add	r7, sp, #0
+ 80004e6:	6078      	str	r0, [r7, #4]
+	// 检查 SPI 句柄分配是否不为空
+	if (hspi == NULL) {
+ 80004e8:	687b      	ldr	r3, [r7, #4]
+ 80004ea:	2b00      	cmp	r3, #0
+ 80004ec:	d101      	bne.n	80004f2 <spi_init+0x12>
+		return DEV_ERROR;
+ 80004ee:	2301      	movs	r3, #1
+ 80004f0:	e05a      	b.n	80005a8 <spi_init+0xc8>
+	}
+
+	// 禁用 CRC 计算
+	hspi->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+ 80004f2:	687b      	ldr	r3, [r7, #4]
+ 80004f4:	2200      	movs	r2, #0
+ 80004f6:	629a      	str	r2, [r3, #40]	@ 0x28
+	if (hspi->State == SPI_STATE_RESET) {
+ 80004f8:	687b      	ldr	r3, [r7, #4]
+ 80004fa:	f893 303c 	ldrb.w	r3, [r3, #60]	@ 0x3c
+ 80004fe:	2b00      	cmp	r3, #0
+ 8000500:	d101      	bne.n	8000506 <spi_init+0x26>
+		spi1_gpio_init();
+ 8000502:	f7ff ff69 	bl	80003d8 <spi1_gpio_init>
+	}
+
+	// hspi 状态忙
+	hspi->State = SPI_STATE_BUSY;
+ 8000506:	687b      	ldr	r3, [r7, #4]
+ 8000508:	2202      	movs	r2, #2
+ 800050a:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+
+	// 禁用 SPI
+	CLEAR_BIT(hspi->Instance->CR1, SPI_CR1_SPE);
+ 800050e:	687b      	ldr	r3, [r7, #4]
+ 8000510:	681b      	ldr	r3, [r3, #0]
+ 8000512:	681a      	ldr	r2, [r3, #0]
+ 8000514:	687b      	ldr	r3, [r7, #4]
+ 8000516:	681b      	ldr	r3, [r3, #0]
+ 8000518:	f022 0240 	bic.w	r2, r2, #64	@ 0x40
+ 800051c:	601a      	str	r2, [r3, #0]
+
+	// 控制寄存器1 (CR1) 的配置
+	WRITE_REG(hspi->Instance->CR1, ((hspi->Init.Mode & (SPI_CR1_MSTR | SPI_CR1_SSI)) |
+ 800051e:	687b      	ldr	r3, [r7, #4]
+ 8000520:	685b      	ldr	r3, [r3, #4]
+ 8000522:	f403 7282 	and.w	r2, r3, #260	@ 0x104
+ 8000526:	687b      	ldr	r3, [r7, #4]
+ 8000528:	689b      	ldr	r3, [r3, #8]
+ 800052a:	f403 4304 	and.w	r3, r3, #33792	@ 0x8400
+ 800052e:	431a      	orrs	r2, r3
+ 8000530:	687b      	ldr	r3, [r7, #4]
+ 8000532:	68db      	ldr	r3, [r3, #12]
+ 8000534:	f403 6300 	and.w	r3, r3, #2048	@ 0x800
+ 8000538:	431a      	orrs	r2, r3
+ 800053a:	687b      	ldr	r3, [r7, #4]
+ 800053c:	691b      	ldr	r3, [r3, #16]
+ 800053e:	f003 0302 	and.w	r3, r3, #2
+ 8000542:	431a      	orrs	r2, r3
+ 8000544:	687b      	ldr	r3, [r7, #4]
+ 8000546:	695b      	ldr	r3, [r3, #20]
+ 8000548:	f003 0301 	and.w	r3, r3, #1
+ 800054c:	431a      	orrs	r2, r3
+ 800054e:	687b      	ldr	r3, [r7, #4]
+ 8000550:	699b      	ldr	r3, [r3, #24]
+ 8000552:	f403 7300 	and.w	r3, r3, #512	@ 0x200
+ 8000556:	431a      	orrs	r2, r3
+ 8000558:	687b      	ldr	r3, [r7, #4]
+ 800055a:	69db      	ldr	r3, [r3, #28]
+ 800055c:	f003 0338 	and.w	r3, r3, #56	@ 0x38
+ 8000560:	431a      	orrs	r2, r3
+ 8000562:	687b      	ldr	r3, [r7, #4]
+ 8000564:	6a1b      	ldr	r3, [r3, #32]
+ 8000566:	f003 0380 	and.w	r3, r3, #128	@ 0x80
+ 800056a:	ea42 0103 	orr.w	r1, r2, r3
+ 800056e:	687b      	ldr	r3, [r7, #4]
+ 8000570:	6a9b      	ldr	r3, [r3, #40]	@ 0x28
+ 8000572:	f403 5200 	and.w	r2, r3, #8192	@ 0x2000
+ 8000576:	687b      	ldr	r3, [r7, #4]
+ 8000578:	681b      	ldr	r3, [r3, #0]
+ 800057a:	430a      	orrs	r2, r1
+ 800057c:	601a      	str	r2, [r3, #0]
+									(hspi->Init.BuadRatePrescaler & SPI_CR1_BR_Msk) |
+									(hspi->Init.FirstBit & SPI_CR1_LSBFIRST) |
+									(hspi->Init.CRCCalculation & SPI_CR1_CRCEN)));
+
+	// 控制寄存器2 (CR2) 的配置
+	WRITE_REG(hspi->Instance->CR2, (((hspi->Init.NSS >> 16U) & SPI_CR2_SSOE) | (hspi->Init.TIMode & SPI_CR2_FRF)));
+ 800057e:	687b      	ldr	r3, [r7, #4]
+ 8000580:	699b      	ldr	r3, [r3, #24]
+ 8000582:	0c1b      	lsrs	r3, r3, #16
+ 8000584:	f003 0104 	and.w	r1, r3, #4
+ 8000588:	687b      	ldr	r3, [r7, #4]
+ 800058a:	6a5b      	ldr	r3, [r3, #36]	@ 0x24
+ 800058c:	f003 0210 	and.w	r2, r3, #16
+ 8000590:	687b      	ldr	r3, [r7, #4]
+ 8000592:	681b      	ldr	r3, [r3, #0]
+ 8000594:	430a      	orrs	r2, r1
+ 8000596:	605a      	str	r2, [r3, #4]
+
+	hspi->ErrorCode = SPI_ERROR_NONE;
+ 8000598:	687b      	ldr	r3, [r7, #4]
+ 800059a:	2200      	movs	r2, #0
+ 800059c:	641a      	str	r2, [r3, #64]	@ 0x40
+	hspi->State = SPI_STATE_READY;
+ 800059e:	687b      	ldr	r3, [r7, #4]
+ 80005a0:	2201      	movs	r2, #1
+ 80005a2:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+
+	return DEV_OK;
+ 80005a6:	2300      	movs	r3, #0
+
+}
+ 80005a8:	4618      	mov	r0, r3
+ 80005aa:	3708      	adds	r7, #8
+ 80005ac:	46bd      	mov	sp, r7
+ 80005ae:	bd80      	pop	{r7, pc}
+
+080005b0 <spi_transmit>:
+
+
+
+StatusTypeDef spi_transmit(SPI_HandleTypeDef *hspi, uint8_t *p_data, uint16_t size, uint32_t timeout) {
+ 80005b0:	b580      	push	{r7, lr}
+ 80005b2:	b088      	sub	sp, #32
+ 80005b4:	af00      	add	r7, sp, #0
+ 80005b6:	60f8      	str	r0, [r7, #12]
+ 80005b8:	60b9      	str	r1, [r7, #8]
+ 80005ba:	603b      	str	r3, [r7, #0]
+ 80005bc:	4613      	mov	r3, r2
+ 80005be:	80fb      	strh	r3, [r7, #6]
+	uint32_t tickstart;
+	StatusTypeDef error_code = DEV_OK;
+ 80005c0:	2300      	movs	r3, #0
+ 80005c2:	77fb      	strb	r3, [r7, #31]
+	uint16_t tx_xfer_cnt;
+
+	tx_xfer_cnt = size;
+ 80005c4:	88fb      	ldrh	r3, [r7, #6]
+ 80005c6:	83bb      	strh	r3, [r7, #28]
+	tickstart = get_tick();
+ 80005c8:	f000 f9f4 	bl	80009b4 <get_tick>
+ 80005cc:	61b8      	str	r0, [r7, #24]
+
+	if (hspi->State != SPI_STATE_READY) {
+ 80005ce:	68fb      	ldr	r3, [r7, #12]
+ 80005d0:	f893 303c 	ldrb.w	r3, [r3, #60]	@ 0x3c
+ 80005d4:	2b01      	cmp	r3, #1
+ 80005d6:	d007      	beq.n	80005e8 <spi_transmit+0x38>
+		error_code = DEV_BUSY;
+ 80005d8:	2302      	movs	r3, #2
+ 80005da:	77fb      	strb	r3, [r7, #31]
+		hspi->State = SPI_STATE_READY;
+ 80005dc:	68fb      	ldr	r3, [r7, #12]
+ 80005de:	2201      	movs	r2, #1
+ 80005e0:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+		return error_code;
+ 80005e4:	7ffb      	ldrb	r3, [r7, #31]
+ 80005e6:	e109      	b.n	80007fc <spi_transmit+0x24c>
+	}
+
+	if ((p_data == NULL) || (size == 0)) {
+ 80005e8:	68bb      	ldr	r3, [r7, #8]
+ 80005ea:	2b00      	cmp	r3, #0
+ 80005ec:	d002      	beq.n	80005f4 <spi_transmit+0x44>
+ 80005ee:	88fb      	ldrh	r3, [r7, #6]
+ 80005f0:	2b00      	cmp	r3, #0
+ 80005f2:	d107      	bne.n	8000604 <spi_transmit+0x54>
+		error_code = DEV_ERROR;
+ 80005f4:	2301      	movs	r3, #1
+ 80005f6:	77fb      	strb	r3, [r7, #31]
+		hspi->State = SPI_STATE_READY;
+ 80005f8:	68fb      	ldr	r3, [r7, #12]
+ 80005fa:	2201      	movs	r2, #1
+ 80005fc:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+		return error_code;
+ 8000600:	7ffb      	ldrb	r3, [r7, #31]
+ 8000602:	e0fb      	b.n	80007fc <spi_transmit+0x24c>
+	}
+
+	// 设置事务信息
+	hspi->State = SPI_STATE_BUSY_TX;
+ 8000604:	68fb      	ldr	r3, [r7, #12]
+ 8000606:	2203      	movs	r2, #3
+ 8000608:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+	hspi->ErrorCode = SPI_ERROR_NONE;
+ 800060c:	68fb      	ldr	r3, [r7, #12]
+ 800060e:	2200      	movs	r2, #0
+ 8000610:	641a      	str	r2, [r3, #64]	@ 0x40
+	hspi->pTxBuffPtr = (uint8_t *)p_data;
+ 8000612:	68fb      	ldr	r3, [r7, #12]
+ 8000614:	68ba      	ldr	r2, [r7, #8]
+ 8000616:	62da      	str	r2, [r3, #44]	@ 0x2c
+	hspi->TxXferSize = size;
+ 8000618:	68fb      	ldr	r3, [r7, #12]
+ 800061a:	88fa      	ldrh	r2, [r7, #6]
+ 800061c:	861a      	strh	r2, [r3, #48]	@ 0x30
+	hspi->TxXferCount = size;
+ 800061e:	68fb      	ldr	r3, [r7, #12]
+ 8000620:	88fa      	ldrh	r2, [r7, #6]
+ 8000622:	865a      	strh	r2, [r3, #50]	@ 0x32
+	hspi->pRxBuffPtr = (uint8_t *)NULL;
+ 8000624:	68fb      	ldr	r3, [r7, #12]
+ 8000626:	2200      	movs	r2, #0
+ 8000628:	635a      	str	r2, [r3, #52]	@ 0x34
+	hspi->RxXferSize = 0;
+ 800062a:	68fb      	ldr	r3, [r7, #12]
+ 800062c:	2200      	movs	r2, #0
+ 800062e:	871a      	strh	r2, [r3, #56]	@ 0x38
+	hspi->RxXferCount = 0;
+ 8000630:	68fb      	ldr	r3, [r7, #12]
+ 8000632:	2200      	movs	r2, #0
+ 8000634:	875a      	strh	r2, [r3, #58]	@ 0x3a
+
+
+	// 配置通信方向
+	if (hspi->Init.Direction == SPI_DIRECTION_1LINE) {
+ 8000636:	68fb      	ldr	r3, [r7, #12]
+ 8000638:	689b      	ldr	r3, [r3, #8]
+ 800063a:	f5b3 4f00 	cmp.w	r3, #32768	@ 0x8000
+ 800063e:	d10f      	bne.n	8000660 <spi_transmit+0xb0>
+		CLEAR_BIT(hspi->Instance->CR1, SPI_CR1_SPE);
+ 8000640:	68fb      	ldr	r3, [r7, #12]
+ 8000642:	681b      	ldr	r3, [r3, #0]
+ 8000644:	681a      	ldr	r2, [r3, #0]
+ 8000646:	68fb      	ldr	r3, [r7, #12]
+ 8000648:	681b      	ldr	r3, [r3, #0]
+ 800064a:	f022 0240 	bic.w	r2, r2, #64	@ 0x40
+ 800064e:	601a      	str	r2, [r3, #0]
+
+		// 设置一条 TX 线路
+		SET_BIT(hspi->Instance->CR1, SPI_CR1_BIDIOE);
+ 8000650:	68fb      	ldr	r3, [r7, #12]
+ 8000652:	681b      	ldr	r3, [r3, #0]
+ 8000654:	681a      	ldr	r2, [r3, #0]
+ 8000656:	68fb      	ldr	r3, [r7, #12]
+ 8000658:	681b      	ldr	r3, [r3, #0]
+ 800065a:	f442 4280 	orr.w	r2, r2, #16384	@ 0x4000
+ 800065e:	601a      	str	r2, [r3, #0]
+	}
+
+
+	// 检查 SPI 是否启用, 若未启用则启用
+	if ((hspi->Instance->CR1 & SPI_CR1_SPE) != SPI_CR1_SPE) {
+ 8000660:	68fb      	ldr	r3, [r7, #12]
+ 8000662:	681b      	ldr	r3, [r3, #0]
+ 8000664:	681b      	ldr	r3, [r3, #0]
+ 8000666:	f003 0340 	and.w	r3, r3, #64	@ 0x40
+ 800066a:	2b40      	cmp	r3, #64	@ 0x40
+ 800066c:	d007      	beq.n	800067e <spi_transmit+0xce>
+		SET_BIT(hspi->Instance->CR1, SPI_CR1_SPE);
+ 800066e:	68fb      	ldr	r3, [r7, #12]
+ 8000670:	681b      	ldr	r3, [r3, #0]
+ 8000672:	681a      	ldr	r2, [r3, #0]
+ 8000674:	68fb      	ldr	r3, [r7, #12]
+ 8000676:	681b      	ldr	r3, [r3, #0]
+ 8000678:	f042 0240 	orr.w	r2, r2, #64	@ 0x40
+ 800067c:	601a      	str	r2, [r3, #0]
+	}
+
+
+	// 以 16 bit 模式发送数据
+	if (hspi->Init.DataSize == SPI_DATASIZE_16BIT) {
+ 800067e:	68fb      	ldr	r3, [r7, #12]
+ 8000680:	68db      	ldr	r3, [r3, #12]
+ 8000682:	f5b3 6f00 	cmp.w	r3, #2048	@ 0x800
+ 8000686:	d150      	bne.n	800072a <spi_transmit+0x17a>
+		if ((hspi->Init.Mode == SPI_MODE_SLAVE) || (tx_xfer_cnt == 1)) {
+ 8000688:	68fb      	ldr	r3, [r7, #12]
+ 800068a:	685b      	ldr	r3, [r3, #4]
+ 800068c:	2b00      	cmp	r3, #0
+ 800068e:	d002      	beq.n	8000696 <spi_transmit+0xe6>
+ 8000690:	8bbb      	ldrh	r3, [r7, #28]
+ 8000692:	2b01      	cmp	r3, #1
+ 8000694:	d143      	bne.n	800071e <spi_transmit+0x16e>
+			hspi->Instance->DR = *((uint16_t *)hspi->pTxBuffPtr);
+ 8000696:	68fb      	ldr	r3, [r7, #12]
+ 8000698:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 800069a:	881a      	ldrh	r2, [r3, #0]
+ 800069c:	68fb      	ldr	r3, [r7, #12]
+ 800069e:	681b      	ldr	r3, [r3, #0]
+ 80006a0:	60da      	str	r2, [r3, #12]
+			hspi->pTxBuffPtr += sizeof(uint16_t);
+ 80006a2:	68fb      	ldr	r3, [r7, #12]
+ 80006a4:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 80006a6:	1c9a      	adds	r2, r3, #2
+ 80006a8:	68fb      	ldr	r3, [r7, #12]
+ 80006aa:	62da      	str	r2, [r3, #44]	@ 0x2c
+			hspi->TxXferCount--;
+ 80006ac:	68fb      	ldr	r3, [r7, #12]
+ 80006ae:	8e5b      	ldrh	r3, [r3, #50]	@ 0x32
+ 80006b0:	b29b      	uxth	r3, r3
+ 80006b2:	3b01      	subs	r3, #1
+ 80006b4:	b29a      	uxth	r2, r3
+ 80006b6:	68fb      	ldr	r3, [r7, #12]
+ 80006b8:	865a      	strh	r2, [r3, #50]	@ 0x32
+		}
+		while (hspi->TxXferCount > 0) {
+ 80006ba:	e030      	b.n	800071e <spi_transmit+0x16e>
+			// 检查 TXE 标志是否已设置, 然后发送数据
+			if (hspi->Instance->SR & (SPI_FLAG_TXE)) {
+ 80006bc:	68fb      	ldr	r3, [r7, #12]
+ 80006be:	681b      	ldr	r3, [r3, #0]
+ 80006c0:	689b      	ldr	r3, [r3, #8]
+ 80006c2:	f003 0302 	and.w	r3, r3, #2
+ 80006c6:	2b00      	cmp	r3, #0
+ 80006c8:	d012      	beq.n	80006f0 <spi_transmit+0x140>
+				hspi->Instance->DR = *((uint16_t *)hspi->pTxBuffPtr);
+ 80006ca:	68fb      	ldr	r3, [r7, #12]
+ 80006cc:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 80006ce:	881a      	ldrh	r2, [r3, #0]
+ 80006d0:	68fb      	ldr	r3, [r7, #12]
+ 80006d2:	681b      	ldr	r3, [r3, #0]
+ 80006d4:	60da      	str	r2, [r3, #12]
+				hspi->pTxBuffPtr += sizeof(uint16_t);
+ 80006d6:	68fb      	ldr	r3, [r7, #12]
+ 80006d8:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 80006da:	1c9a      	adds	r2, r3, #2
+ 80006dc:	68fb      	ldr	r3, [r7, #12]
+ 80006de:	62da      	str	r2, [r3, #44]	@ 0x2c
+				hspi->TxXferCount--;
+ 80006e0:	68fb      	ldr	r3, [r7, #12]
+ 80006e2:	8e5b      	ldrh	r3, [r3, #50]	@ 0x32
+ 80006e4:	b29b      	uxth	r3, r3
+ 80006e6:	3b01      	subs	r3, #1
+ 80006e8:	b29a      	uxth	r2, r3
+ 80006ea:	68fb      	ldr	r3, [r7, #12]
+ 80006ec:	865a      	strh	r2, [r3, #50]	@ 0x32
+ 80006ee:	e016      	b.n	800071e <spi_transmit+0x16e>
+			} else {
+				if ((((get_tick() - tickstart) >= timeout) && (timeout != MAX_DELAY)) || (timeout == 0)) {
+ 80006f0:	f000 f960 	bl	80009b4 <get_tick>
+ 80006f4:	4602      	mov	r2, r0
+ 80006f6:	69bb      	ldr	r3, [r7, #24]
+ 80006f8:	1ad3      	subs	r3, r2, r3
+ 80006fa:	683a      	ldr	r2, [r7, #0]
+ 80006fc:	429a      	cmp	r2, r3
+ 80006fe:	d803      	bhi.n	8000708 <spi_transmit+0x158>
+ 8000700:	683b      	ldr	r3, [r7, #0]
+ 8000702:	f1b3 3fff 	cmp.w	r3, #4294967295
+ 8000706:	d102      	bne.n	800070e <spi_transmit+0x15e>
+ 8000708:	683b      	ldr	r3, [r7, #0]
+ 800070a:	2b00      	cmp	r3, #0
+ 800070c:	d107      	bne.n	800071e <spi_transmit+0x16e>
+					error_code = DEV_TIMEOUT;
+ 800070e:	2303      	movs	r3, #3
+ 8000710:	77fb      	strb	r3, [r7, #31]
+					hspi->State = SPI_STATE_READY;
+ 8000712:	68fb      	ldr	r3, [r7, #12]
+ 8000714:	2201      	movs	r2, #1
+ 8000716:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+					return error_code;
+ 800071a:	7ffb      	ldrb	r3, [r7, #31]
+ 800071c:	e06e      	b.n	80007fc <spi_transmit+0x24c>
+		while (hspi->TxXferCount > 0) {
+ 800071e:	68fb      	ldr	r3, [r7, #12]
+ 8000720:	8e5b      	ldrh	r3, [r3, #50]	@ 0x32
+ 8000722:	b29b      	uxth	r3, r3
+ 8000724:	2b00      	cmp	r3, #0
+ 8000726:	d1c9      	bne.n	80006bc <spi_transmit+0x10c>
+ 8000728:	e051      	b.n	80007ce <spi_transmit+0x21e>
+		}
+	}
+
+	// 以 8 bit 模式发送数据
+	else {
+		if ((hspi->Init.Mode == SPI_MODE_SLAVE) || (tx_xfer_cnt == 1)) {
+ 800072a:	68fb      	ldr	r3, [r7, #12]
+ 800072c:	685b      	ldr	r3, [r3, #4]
+ 800072e:	2b00      	cmp	r3, #0
+ 8000730:	d002      	beq.n	8000738 <spi_transmit+0x188>
+ 8000732:	8bbb      	ldrh	r3, [r7, #28]
+ 8000734:	2b01      	cmp	r3, #1
+ 8000736:	d145      	bne.n	80007c4 <spi_transmit+0x214>
+			*((__IO uint8_t *)hspi->Instance->DR) = *hspi->pTxBuffPtr;
+ 8000738:	68fb      	ldr	r3, [r7, #12]
+ 800073a:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 800073c:	68fa      	ldr	r2, [r7, #12]
+ 800073e:	6812      	ldr	r2, [r2, #0]
+ 8000740:	68d2      	ldr	r2, [r2, #12]
+ 8000742:	781b      	ldrb	r3, [r3, #0]
+ 8000744:	7013      	strb	r3, [r2, #0]
+			hspi->pTxBuffPtr += sizeof(uint8_t);
+ 8000746:	68fb      	ldr	r3, [r7, #12]
+ 8000748:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 800074a:	1c5a      	adds	r2, r3, #1
+ 800074c:	68fb      	ldr	r3, [r7, #12]
+ 800074e:	62da      	str	r2, [r3, #44]	@ 0x2c
+			hspi->TxXferCount--;
+ 8000750:	68fb      	ldr	r3, [r7, #12]
+ 8000752:	8e5b      	ldrh	r3, [r3, #50]	@ 0x32
+ 8000754:	b29b      	uxth	r3, r3
+ 8000756:	3b01      	subs	r3, #1
+ 8000758:	b29a      	uxth	r2, r3
+ 800075a:	68fb      	ldr	r3, [r7, #12]
+ 800075c:	865a      	strh	r2, [r3, #50]	@ 0x32
+		}
+		while (hspi->TxXferCount > 0) {
+ 800075e:	e031      	b.n	80007c4 <spi_transmit+0x214>
+			// 检查 TXE 标志是否已设置, 然后发送数据
+			if (hspi->Instance->SR & (SPI_FLAG_TXE)) {
+ 8000760:	68fb      	ldr	r3, [r7, #12]
+ 8000762:	681b      	ldr	r3, [r3, #0]
+ 8000764:	689b      	ldr	r3, [r3, #8]
+ 8000766:	f003 0302 	and.w	r3, r3, #2
+ 800076a:	2b00      	cmp	r3, #0
+ 800076c:	d013      	beq.n	8000796 <spi_transmit+0x1e6>
+				*((__IO uint8_t *)hspi->Instance->DR) = *hspi->pTxBuffPtr;
+ 800076e:	68fb      	ldr	r3, [r7, #12]
+ 8000770:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 8000772:	68fa      	ldr	r2, [r7, #12]
+ 8000774:	6812      	ldr	r2, [r2, #0]
+ 8000776:	68d2      	ldr	r2, [r2, #12]
+ 8000778:	781b      	ldrb	r3, [r3, #0]
+ 800077a:	7013      	strb	r3, [r2, #0]
+				hspi->pTxBuffPtr += sizeof(uint8_t);
+ 800077c:	68fb      	ldr	r3, [r7, #12]
+ 800077e:	6adb      	ldr	r3, [r3, #44]	@ 0x2c
+ 8000780:	1c5a      	adds	r2, r3, #1
+ 8000782:	68fb      	ldr	r3, [r7, #12]
+ 8000784:	62da      	str	r2, [r3, #44]	@ 0x2c
+				hspi->TxXferCount--;
+ 8000786:	68fb      	ldr	r3, [r7, #12]
+ 8000788:	8e5b      	ldrh	r3, [r3, #50]	@ 0x32
+ 800078a:	b29b      	uxth	r3, r3
+ 800078c:	3b01      	subs	r3, #1
+ 800078e:	b29a      	uxth	r2, r3
+ 8000790:	68fb      	ldr	r3, [r7, #12]
+ 8000792:	865a      	strh	r2, [r3, #50]	@ 0x32
+ 8000794:	e016      	b.n	80007c4 <spi_transmit+0x214>
+			} else {
+				if ((((get_tick() - tickstart) >= timeout) && (timeout != MAX_DELAY)) || (timeout == 0)) {
+ 8000796:	f000 f90d 	bl	80009b4 <get_tick>
+ 800079a:	4602      	mov	r2, r0
+ 800079c:	69bb      	ldr	r3, [r7, #24]
+ 800079e:	1ad3      	subs	r3, r2, r3
+ 80007a0:	683a      	ldr	r2, [r7, #0]
+ 80007a2:	429a      	cmp	r2, r3
+ 80007a4:	d803      	bhi.n	80007ae <spi_transmit+0x1fe>
+ 80007a6:	683b      	ldr	r3, [r7, #0]
+ 80007a8:	f1b3 3fff 	cmp.w	r3, #4294967295
+ 80007ac:	d102      	bne.n	80007b4 <spi_transmit+0x204>
+ 80007ae:	683b      	ldr	r3, [r7, #0]
+ 80007b0:	2b00      	cmp	r3, #0
+ 80007b2:	d107      	bne.n	80007c4 <spi_transmit+0x214>
+					error_code = DEV_TIMEOUT;
+ 80007b4:	2303      	movs	r3, #3
+ 80007b6:	77fb      	strb	r3, [r7, #31]
+					hspi->State = SPI_STATE_READY;
+ 80007b8:	68fb      	ldr	r3, [r7, #12]
+ 80007ba:	2201      	movs	r2, #1
+ 80007bc:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+					return error_code;
+ 80007c0:	7ffb      	ldrb	r3, [r7, #31]
+ 80007c2:	e01b      	b.n	80007fc <spi_transmit+0x24c>
+		while (hspi->TxXferCount > 0) {
+ 80007c4:	68fb      	ldr	r3, [r7, #12]
+ 80007c6:	8e5b      	ldrh	r3, [r3, #50]	@ 0x32
+ 80007c8:	b29b      	uxth	r3, r3
+ 80007ca:	2b00      	cmp	r3, #0
+ 80007cc:	d1c8      	bne.n	8000760 <spi_transmit+0x1b0>
+			}
+		}
+	}
+
+
+	if (hspi->Init.Direction == SPI_DIRECTION_2LINES) {
+ 80007ce:	68fb      	ldr	r3, [r7, #12]
+ 80007d0:	689b      	ldr	r3, [r3, #8]
+ 80007d2:	2b00      	cmp	r3, #0
+ 80007d4:	d107      	bne.n	80007e6 <spi_transmit+0x236>
+		uint8_t temp;
+		temp = hspi->Instance->DR;
+ 80007d6:	68fb      	ldr	r3, [r7, #12]
+ 80007d8:	681b      	ldr	r3, [r3, #0]
+ 80007da:	68db      	ldr	r3, [r3, #12]
+ 80007dc:	75fb      	strb	r3, [r7, #23]
+		temp = hspi->Instance->SR;
+ 80007de:	68fb      	ldr	r3, [r7, #12]
+ 80007e0:	681b      	ldr	r3, [r3, #0]
+ 80007e2:	689b      	ldr	r3, [r3, #8]
+ 80007e4:	75fb      	strb	r3, [r7, #23]
+	}
+
+	if (hspi->ErrorCode != SPI_ERROR_NONE) {
+ 80007e6:	68fb      	ldr	r3, [r7, #12]
+ 80007e8:	6c1b      	ldr	r3, [r3, #64]	@ 0x40
+ 80007ea:	2b00      	cmp	r3, #0
+ 80007ec:	d001      	beq.n	80007f2 <spi_transmit+0x242>
+		error_code = DEV_ERROR;
+ 80007ee:	2301      	movs	r3, #1
+ 80007f0:	77fb      	strb	r3, [r7, #31]
+	}
+
+	hspi->State = SPI_STATE_READY;
+ 80007f2:	68fb      	ldr	r3, [r7, #12]
+ 80007f4:	2201      	movs	r2, #1
+ 80007f6:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+
+	return error_code;
+ 80007fa:	7ffb      	ldrb	r3, [r7, #31]
+}
+ 80007fc:	4618      	mov	r0, r3
+ 80007fe:	3720      	adds	r7, #32
+ 8000800:	46bd      	mov	sp, r7
+ 8000802:	bd80      	pop	{r7, pc}
+
+08000804 <spi_receive>:
+
+
+
+
+StatusTypeDef spi_receive(SPI_HandleTypeDef *hspi, uint8_t *p_data, uint16_t size, uint32_t timeout) {
+ 8000804:	b580      	push	{r7, lr}
+ 8000806:	b086      	sub	sp, #24
+ 8000808:	af00      	add	r7, sp, #0
+ 800080a:	60f8      	str	r0, [r7, #12]
+ 800080c:	60b9      	str	r1, [r7, #8]
+ 800080e:	603b      	str	r3, [r7, #0]
+ 8000810:	4613      	mov	r3, r2
+ 8000812:	80fb      	strh	r3, [r7, #6]
+	uint32_t tickstart;
+	StatusTypeDef error_code = DEV_OK;
+ 8000814:	2300      	movs	r3, #0
+ 8000816:	75fb      	strb	r3, [r7, #23]
+
+	tickstart = get_tick();
+ 8000818:	f000 f8cc 	bl	80009b4 <get_tick>
+ 800081c:	6138      	str	r0, [r7, #16]
+
+	if (hspi->State != SPI_STATE_READY) {
+ 800081e:	68fb      	ldr	r3, [r7, #12]
+ 8000820:	f893 303c 	ldrb.w	r3, [r3, #60]	@ 0x3c
+ 8000824:	2b01      	cmp	r3, #1
+ 8000826:	d007      	beq.n	8000838 <spi_receive+0x34>
+		error_code = DEV_BUSY;
+ 8000828:	2302      	movs	r3, #2
+ 800082a:	75fb      	strb	r3, [r7, #23]
+		hspi->State = SPI_STATE_READY;
+ 800082c:	68fb      	ldr	r3, [r7, #12]
+ 800082e:	2201      	movs	r2, #1
+ 8000830:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+		return error_code;
+ 8000834:	7dfb      	ldrb	r3, [r7, #23]
+ 8000836:	e0b9      	b.n	80009ac <spi_receive+0x1a8>
+	}
+
+	if ((p_data == NULL) || (size == 0)) {
+ 8000838:	68bb      	ldr	r3, [r7, #8]
+ 800083a:	2b00      	cmp	r3, #0
+ 800083c:	d002      	beq.n	8000844 <spi_receive+0x40>
+ 800083e:	88fb      	ldrh	r3, [r7, #6]
+ 8000840:	2b00      	cmp	r3, #0
+ 8000842:	d107      	bne.n	8000854 <spi_receive+0x50>
+		error_code = DEV_ERROR;
+ 8000844:	2301      	movs	r3, #1
+ 8000846:	75fb      	strb	r3, [r7, #23]
+		hspi->State = SPI_STATE_READY;
+ 8000848:	68fb      	ldr	r3, [r7, #12]
+ 800084a:	2201      	movs	r2, #1
+ 800084c:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+		return error_code;
+ 8000850:	7dfb      	ldrb	r3, [r7, #23]
+ 8000852:	e0ab      	b.n	80009ac <spi_receive+0x1a8>
+	}
+
+	// 设置事务信息
+	hspi->State = SPI_STATE_BUSY_RX;
+ 8000854:	68fb      	ldr	r3, [r7, #12]
+ 8000856:	2204      	movs	r2, #4
+ 8000858:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+	hspi->ErrorCode = SPI_ERROR_NONE;
+ 800085c:	68fb      	ldr	r3, [r7, #12]
+ 800085e:	2200      	movs	r2, #0
+ 8000860:	641a      	str	r2, [r3, #64]	@ 0x40
+	hspi->pTxBuffPtr = (uint8_t *)NULL;
+ 8000862:	68fb      	ldr	r3, [r7, #12]
+ 8000864:	2200      	movs	r2, #0
+ 8000866:	62da      	str	r2, [r3, #44]	@ 0x2c
+	hspi->TxXferSize = 0;
+ 8000868:	68fb      	ldr	r3, [r7, #12]
+ 800086a:	2200      	movs	r2, #0
+ 800086c:	861a      	strh	r2, [r3, #48]	@ 0x30
+	hspi->TxXferCount = 0;
+ 800086e:	68fb      	ldr	r3, [r7, #12]
+ 8000870:	2200      	movs	r2, #0
+ 8000872:	865a      	strh	r2, [r3, #50]	@ 0x32
+	hspi->pRxBuffPtr = (uint8_t *)p_data;
+ 8000874:	68fb      	ldr	r3, [r7, #12]
+ 8000876:	68ba      	ldr	r2, [r7, #8]
+ 8000878:	635a      	str	r2, [r3, #52]	@ 0x34
+	hspi->RxXferSize = size;
+ 800087a:	68fb      	ldr	r3, [r7, #12]
+ 800087c:	88fa      	ldrh	r2, [r7, #6]
+ 800087e:	871a      	strh	r2, [r3, #56]	@ 0x38
+	hspi->RxXferCount = size;
+ 8000880:	68fb      	ldr	r3, [r7, #12]
+ 8000882:	88fa      	ldrh	r2, [r7, #6]
+ 8000884:	875a      	strh	r2, [r3, #58]	@ 0x3a
+
+
+	// 检查 SPI 是否启用, 若未启用则启用
+	if ((hspi->Instance->CR1 & SPI_CR1_SPE) != SPI_CR1_SPE) {
+ 8000886:	68fb      	ldr	r3, [r7, #12]
+ 8000888:	681b      	ldr	r3, [r3, #0]
+ 800088a:	681b      	ldr	r3, [r3, #0]
+ 800088c:	f003 0340 	and.w	r3, r3, #64	@ 0x40
+ 8000890:	2b40      	cmp	r3, #64	@ 0x40
+ 8000892:	d007      	beq.n	80008a4 <spi_receive+0xa0>
+		SET_BIT(hspi->Instance->CR1, SPI_CR1_SPE);
+ 8000894:	68fb      	ldr	r3, [r7, #12]
+ 8000896:	681b      	ldr	r3, [r3, #0]
+ 8000898:	681a      	ldr	r2, [r3, #0]
+ 800089a:	68fb      	ldr	r3, [r7, #12]
+ 800089c:	681b      	ldr	r3, [r3, #0]
+ 800089e:	f042 0240 	orr.w	r2, r2, #64	@ 0x40
+ 80008a2:	601a      	str	r2, [r3, #0]
+	}
+
+
+	// 以 16 bit 模式接收数据
+	if (hspi->Init.DataSize == SPI_DATASIZE_16BIT) {
+ 80008a4:	68fb      	ldr	r3, [r7, #12]
+ 80008a6:	68db      	ldr	r3, [r3, #12]
+ 80008a8:	f5b3 6f00 	cmp.w	r3, #2048	@ 0x800
+ 80008ac:	d16e      	bne.n	800098c <spi_receive+0x188>
+		while (hspi->RxXferCount > 0) {
+ 80008ae:	e033      	b.n	8000918 <spi_receive+0x114>
+			// 检查 RXNE 标志是否已设置, 然后接受数据
+			if (hspi->Instance->SR & (SPI_FLAG_RXNE)) {
+ 80008b0:	68fb      	ldr	r3, [r7, #12]
+ 80008b2:	681b      	ldr	r3, [r3, #0]
+ 80008b4:	689b      	ldr	r3, [r3, #8]
+ 80008b6:	f003 0301 	and.w	r3, r3, #1
+ 80008ba:	2b00      	cmp	r3, #0
+ 80008bc:	d015      	beq.n	80008ea <spi_receive+0xe6>
+				*(uint16_t *)hspi->pRxBuffPtr = *(__IO uint16_t *)&hspi->Instance->DR;
+ 80008be:	68fb      	ldr	r3, [r7, #12]
+ 80008c0:	681b      	ldr	r3, [r3, #0]
+ 80008c2:	f103 020c 	add.w	r2, r3, #12
+ 80008c6:	68fb      	ldr	r3, [r7, #12]
+ 80008c8:	6b5b      	ldr	r3, [r3, #52]	@ 0x34
+ 80008ca:	8812      	ldrh	r2, [r2, #0]
+ 80008cc:	b292      	uxth	r2, r2
+ 80008ce:	801a      	strh	r2, [r3, #0]
+				hspi->pRxBuffPtr += sizeof(uint16_t);
+ 80008d0:	68fb      	ldr	r3, [r7, #12]
+ 80008d2:	6b5b      	ldr	r3, [r3, #52]	@ 0x34
+ 80008d4:	1c9a      	adds	r2, r3, #2
+ 80008d6:	68fb      	ldr	r3, [r7, #12]
+ 80008d8:	635a      	str	r2, [r3, #52]	@ 0x34
+				hspi->RxXferCount--;
+ 80008da:	68fb      	ldr	r3, [r7, #12]
+ 80008dc:	8f5b      	ldrh	r3, [r3, #58]	@ 0x3a
+ 80008de:	b29b      	uxth	r3, r3
+ 80008e0:	3b01      	subs	r3, #1
+ 80008e2:	b29a      	uxth	r2, r3
+ 80008e4:	68fb      	ldr	r3, [r7, #12]
+ 80008e6:	875a      	strh	r2, [r3, #58]	@ 0x3a
+ 80008e8:	e016      	b.n	8000918 <spi_receive+0x114>
+			} else {
+				if ((((get_tick() - tickstart) >= timeout) && (timeout != MAX_DELAY)) || (timeout == 0)) {
+ 80008ea:	f000 f863 	bl	80009b4 <get_tick>
+ 80008ee:	4602      	mov	r2, r0
+ 80008f0:	693b      	ldr	r3, [r7, #16]
+ 80008f2:	1ad3      	subs	r3, r2, r3
+ 80008f4:	683a      	ldr	r2, [r7, #0]
+ 80008f6:	429a      	cmp	r2, r3
+ 80008f8:	d803      	bhi.n	8000902 <spi_receive+0xfe>
+ 80008fa:	683b      	ldr	r3, [r7, #0]
+ 80008fc:	f1b3 3fff 	cmp.w	r3, #4294967295
+ 8000900:	d102      	bne.n	8000908 <spi_receive+0x104>
+ 8000902:	683b      	ldr	r3, [r7, #0]
+ 8000904:	2b00      	cmp	r3, #0
+ 8000906:	d107      	bne.n	8000918 <spi_receive+0x114>
+					error_code = DEV_TIMEOUT;
+ 8000908:	2303      	movs	r3, #3
+ 800090a:	75fb      	strb	r3, [r7, #23]
+					hspi->State = SPI_STATE_READY;
+ 800090c:	68fb      	ldr	r3, [r7, #12]
+ 800090e:	2201      	movs	r2, #1
+ 8000910:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+					return error_code;
+ 8000914:	7dfb      	ldrb	r3, [r7, #23]
+ 8000916:	e049      	b.n	80009ac <spi_receive+0x1a8>
+		while (hspi->RxXferCount > 0) {
+ 8000918:	68fb      	ldr	r3, [r7, #12]
+ 800091a:	8f5b      	ldrh	r3, [r3, #58]	@ 0x3a
+ 800091c:	b29b      	uxth	r3, r3
+ 800091e:	2b00      	cmp	r3, #0
+ 8000920:	d1c6      	bne.n	80008b0 <spi_receive+0xac>
+ 8000922:	e038      	b.n	8000996 <spi_receive+0x192>
+
+	// 以 8 bit 模式接收数据
+	else {
+		while (hspi->RxXferCount > 0) {
+			// 检查 RXNE 标志是否已设置, 然后接受数据
+			if (hspi->Instance->SR & (SPI_FLAG_RXNE)) {
+ 8000924:	68fb      	ldr	r3, [r7, #12]
+ 8000926:	681b      	ldr	r3, [r3, #0]
+ 8000928:	689b      	ldr	r3, [r3, #8]
+ 800092a:	f003 0301 	and.w	r3, r3, #1
+ 800092e:	2b00      	cmp	r3, #0
+ 8000930:	d015      	beq.n	800095e <spi_receive+0x15a>
+				*(uint8_t *)hspi->pRxBuffPtr = *(__IO uint8_t *)&hspi->Instance->DR;
+ 8000932:	68fb      	ldr	r3, [r7, #12]
+ 8000934:	681b      	ldr	r3, [r3, #0]
+ 8000936:	f103 020c 	add.w	r2, r3, #12
+ 800093a:	68fb      	ldr	r3, [r7, #12]
+ 800093c:	6b5b      	ldr	r3, [r3, #52]	@ 0x34
+ 800093e:	7812      	ldrb	r2, [r2, #0]
+ 8000940:	b2d2      	uxtb	r2, r2
+ 8000942:	701a      	strb	r2, [r3, #0]
+				hspi->pRxBuffPtr += sizeof(uint8_t);
+ 8000944:	68fb      	ldr	r3, [r7, #12]
+ 8000946:	6b5b      	ldr	r3, [r3, #52]	@ 0x34
+ 8000948:	1c5a      	adds	r2, r3, #1
+ 800094a:	68fb      	ldr	r3, [r7, #12]
+ 800094c:	635a      	str	r2, [r3, #52]	@ 0x34
+				hspi->RxXferCount--;
+ 800094e:	68fb      	ldr	r3, [r7, #12]
+ 8000950:	8f5b      	ldrh	r3, [r3, #58]	@ 0x3a
+ 8000952:	b29b      	uxth	r3, r3
+ 8000954:	3b01      	subs	r3, #1
+ 8000956:	b29a      	uxth	r2, r3
+ 8000958:	68fb      	ldr	r3, [r7, #12]
+ 800095a:	875a      	strh	r2, [r3, #58]	@ 0x3a
+ 800095c:	e016      	b.n	800098c <spi_receive+0x188>
+			} else {
+				if ((((get_tick() - tickstart) >= timeout) && (timeout != MAX_DELAY)) || (timeout == 0)) {
+ 800095e:	f000 f829 	bl	80009b4 <get_tick>
+ 8000962:	4602      	mov	r2, r0
+ 8000964:	693b      	ldr	r3, [r7, #16]
+ 8000966:	1ad3      	subs	r3, r2, r3
+ 8000968:	683a      	ldr	r2, [r7, #0]
+ 800096a:	429a      	cmp	r2, r3
+ 800096c:	d803      	bhi.n	8000976 <spi_receive+0x172>
+ 800096e:	683b      	ldr	r3, [r7, #0]
+ 8000970:	f1b3 3fff 	cmp.w	r3, #4294967295
+ 8000974:	d102      	bne.n	800097c <spi_receive+0x178>
+ 8000976:	683b      	ldr	r3, [r7, #0]
+ 8000978:	2b00      	cmp	r3, #0
+ 800097a:	d107      	bne.n	800098c <spi_receive+0x188>
+					error_code = DEV_TIMEOUT;
+ 800097c:	2303      	movs	r3, #3
+ 800097e:	75fb      	strb	r3, [r7, #23]
+					hspi->State = SPI_STATE_READY;
+ 8000980:	68fb      	ldr	r3, [r7, #12]
+ 8000982:	2201      	movs	r2, #1
+ 8000984:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+					return error_code;
+ 8000988:	7dfb      	ldrb	r3, [r7, #23]
+ 800098a:	e00f      	b.n	80009ac <spi_receive+0x1a8>
+		while (hspi->RxXferCount > 0) {
+ 800098c:	68fb      	ldr	r3, [r7, #12]
+ 800098e:	8f5b      	ldrh	r3, [r3, #58]	@ 0x3a
+ 8000990:	b29b      	uxth	r3, r3
+ 8000992:	2b00      	cmp	r3, #0
+ 8000994:	d1c6      	bne.n	8000924 <spi_receive+0x120>
+			}
+		}
+	}
+
+
+	if (hspi->ErrorCode != SPI_ERROR_NONE) {
+ 8000996:	68fb      	ldr	r3, [r7, #12]
+ 8000998:	6c1b      	ldr	r3, [r3, #64]	@ 0x40
+ 800099a:	2b00      	cmp	r3, #0
+ 800099c:	d001      	beq.n	80009a2 <spi_receive+0x19e>
+		error_code = DEV_ERROR;
+ 800099e:	2301      	movs	r3, #1
+ 80009a0:	75fb      	strb	r3, [r7, #23]
+	}
+
+	hspi->State = SPI_STATE_READY;
+ 80009a2:	68fb      	ldr	r3, [r7, #12]
+ 80009a4:	2201      	movs	r2, #1
+ 80009a6:	f883 203c 	strb.w	r2, [r3, #60]	@ 0x3c
+
+	return error_code;
+ 80009aa:	7dfb      	ldrb	r3, [r7, #23]
+}
+ 80009ac:	4618      	mov	r0, r3
+ 80009ae:	3718      	adds	r7, #24
+ 80009b0:	46bd      	mov	sp, r7
+ 80009b2:	bd80      	pop	{r7, pc}
+
+080009b4 <get_tick>:
+
+	while ((get_tick() - tickstart) < wait) {}
+}
+
+
+uint32_t get_tick(void) {
+ 80009b4:	b480      	push	{r7}
+ 80009b6:	af00      	add	r7, sp, #0
+  \details Disables IRQ interrupts by setting special-purpose register PRIMASK.
+           Can only be executed in Privileged modes.
+ */
+__STATIC_FORCEINLINE void __disable_irq(void)
+{
+  __ASM volatile ("cpsid i" : : : "memory");
+ 80009b8:	b672      	cpsid	i
+}
+ 80009ba:	bf00      	nop
+	__disable_irq();
+	g_curr_tick_p = g_curr_tick;
+ 80009bc:	4b06      	ldr	r3, [pc, #24]	@ (80009d8 <get_tick+0x24>)
+ 80009be:	681b      	ldr	r3, [r3, #0]
+ 80009c0:	4a06      	ldr	r2, [pc, #24]	@ (80009dc <get_tick+0x28>)
+ 80009c2:	6013      	str	r3, [r2, #0]
+  __ASM volatile ("cpsid i" : : : "memory");
+ 80009c4:	b672      	cpsid	i
+}
+ 80009c6:	bf00      	nop
+	__disable_irq();
+
+	return g_curr_tick_p;
+ 80009c8:	4b04      	ldr	r3, [pc, #16]	@ (80009dc <get_tick+0x28>)
+ 80009ca:	681b      	ldr	r3, [r3, #0]
+}
+ 80009cc:	4618      	mov	r0, r3
+ 80009ce:	46bd      	mov	sp, r7
+ 80009d0:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80009d4:	4770      	bx	lr
+ 80009d6:	bf00      	nop
+ 80009d8:	20000068 	.word	0x20000068
+ 80009dc:	2000006c 	.word	0x2000006c
+
+080009e0 <tick_increment>:
+
+
+static void tick_increment(void) {
+ 80009e0:	b480      	push	{r7}
+ 80009e2:	af00      	add	r7, sp, #0
+	g_curr_tick += TICK_FREQ;
+ 80009e4:	4b04      	ldr	r3, [pc, #16]	@ (80009f8 <tick_increment+0x18>)
+ 80009e6:	681b      	ldr	r3, [r3, #0]
+ 80009e8:	3301      	adds	r3, #1
+ 80009ea:	4a03      	ldr	r2, [pc, #12]	@ (80009f8 <tick_increment+0x18>)
+ 80009ec:	6013      	str	r3, [r2, #0]
+}
+ 80009ee:	bf00      	nop
+ 80009f0:	46bd      	mov	sp, r7
+ 80009f2:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80009f6:	4770      	bx	lr
+ 80009f8:	20000068 	.word	0x20000068
+
+080009fc <timebase_init>:
+
+
+/**
+ * 时间基准初始化函数
+ * */
+void timebase_init(void) {
+ 80009fc:	b480      	push	{r7}
+ 80009fe:	af00      	add	r7, sp, #0
+  __ASM volatile ("cpsid i" : : : "memory");
+ 8000a00:	b672      	cpsid	i
+}
+ 8000a02:	bf00      	nop
+
+	// 1. 禁用全局中断
+	__disable_irq();
+
+	// 2. 用每秒的时钟周期数来加载计时器
+	SysTick->LOAD = ONE_SEC_LOAD - 1;
+ 8000a04:	4b0d      	ldr	r3, [pc, #52]	@ (8000a3c <timebase_init+0x40>)
+ 8000a06:	4a0e      	ldr	r2, [pc, #56]	@ (8000a40 <timebase_init+0x44>)
+ 8000a08:	605a      	str	r2, [r3, #4]
+
+	// 3. 清除 systick 当前值寄存器
+	SysTick->VAL = 0;
+ 8000a0a:	4b0c      	ldr	r3, [pc, #48]	@ (8000a3c <timebase_init+0x40>)
+ 8000a0c:	2200      	movs	r2, #0
+ 8000a0e:	609a      	str	r2, [r3, #8]
+
+	// 4. 选择内部时钟源
+	SysTick->CTRL = CTRL_CLCKSRC;
+ 8000a10:	4b0a      	ldr	r3, [pc, #40]	@ (8000a3c <timebase_init+0x40>)
+ 8000a12:	2204      	movs	r2, #4
+ 8000a14:	601a      	str	r2, [r3, #0]
+
+	// 5. 启用中断
+	SysTick->CTRL |= CTRL_TICKINT;
+ 8000a16:	4b09      	ldr	r3, [pc, #36]	@ (8000a3c <timebase_init+0x40>)
+ 8000a18:	681b      	ldr	r3, [r3, #0]
+ 8000a1a:	4a08      	ldr	r2, [pc, #32]	@ (8000a3c <timebase_init+0x40>)
+ 8000a1c:	f043 0302 	orr.w	r3, r3, #2
+ 8000a20:	6013      	str	r3, [r2, #0]
+
+	// 6. 启用 systick
+	SysTick->CTRL |= CTRL_ENABLE;
+ 8000a22:	4b06      	ldr	r3, [pc, #24]	@ (8000a3c <timebase_init+0x40>)
+ 8000a24:	681b      	ldr	r3, [r3, #0]
+ 8000a26:	4a05      	ldr	r2, [pc, #20]	@ (8000a3c <timebase_init+0x40>)
+ 8000a28:	f043 0301 	orr.w	r3, r3, #1
+ 8000a2c:	6013      	str	r3, [r2, #0]
+  __ASM volatile ("cpsie i" : : : "memory");
+ 8000a2e:	b662      	cpsie	i
+}
+ 8000a30:	bf00      	nop
+
+	// 7. 启用全局中断
+	__enable_irq();
+}
+ 8000a32:	bf00      	nop
+ 8000a34:	46bd      	mov	sp, r7
+ 8000a36:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000a3a:	4770      	bx	lr
+ 8000a3c:	e000e010 	.word	0xe000e010
+ 8000a40:	00f423ff 	.word	0x00f423ff
+
+08000a44 <SysTick_Handler>:
+
+
+
+void SysTick_Handler(void) {
+ 8000a44:	b580      	push	{r7, lr}
+ 8000a46:	af00      	add	r7, sp, #0
+	tick_increment();
+ 8000a48:	f7ff ffca 	bl	80009e0 <tick_increment>
+}
+ 8000a4c:	bf00      	nop
+ 8000a4e:	bd80      	pop	{r7, pc}
+
+08000a50 <debug_uart_init>:
+	uart_write(ch);
+	return ch;
+}
+
+
+void debug_uart_init(void) {
+ 8000a50:	b580      	push	{r7, lr}
+ 8000a52:	af00      	add	r7, sp, #0
+	/**
+	 * GPIO 引脚的配置
+	 * */
+	// 1. 启用对 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+ 8000a54:	4b1f      	ldr	r3, [pc, #124]	@ (8000ad4 <debug_uart_init+0x84>)
+ 8000a56:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 8000a58:	4a1e      	ldr	r2, [pc, #120]	@ (8000ad4 <debug_uart_init+0x84>)
+ 8000a5a:	f043 0301 	orr.w	r3, r3, #1
+ 8000a5e:	6313      	str	r3, [r2, #48]	@ 0x30
+
+	// 2. 将 PA2 模式设置为替代功能模式
+	GPIOA->MODER &=~(1U<<4);
+ 8000a60:	4b1d      	ldr	r3, [pc, #116]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a62:	681b      	ldr	r3, [r3, #0]
+ 8000a64:	4a1c      	ldr	r2, [pc, #112]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a66:	f023 0310 	bic.w	r3, r3, #16
+ 8000a6a:	6013      	str	r3, [r2, #0]
+	GPIOA->MODER |=(1U<<5);
+ 8000a6c:	4b1a      	ldr	r3, [pc, #104]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a6e:	681b      	ldr	r3, [r3, #0]
+ 8000a70:	4a19      	ldr	r2, [pc, #100]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a72:	f043 0320 	orr.w	r3, r3, #32
+ 8000a76:	6013      	str	r3, [r2, #0]
+
+	// 3. 设置替代功能类型 AF07 (UART2_TX)
+	GPIOA->AFR[0] |=(1U<<8);
+ 8000a78:	4b17      	ldr	r3, [pc, #92]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a7a:	6a1b      	ldr	r3, [r3, #32]
+ 8000a7c:	4a16      	ldr	r2, [pc, #88]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a7e:	f443 7380 	orr.w	r3, r3, #256	@ 0x100
+ 8000a82:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] |=(1U<<9);
+ 8000a84:	4b14      	ldr	r3, [pc, #80]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a86:	6a1b      	ldr	r3, [r3, #32]
+ 8000a88:	4a13      	ldr	r2, [pc, #76]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a8a:	f443 7300 	orr.w	r3, r3, #512	@ 0x200
+ 8000a8e:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] |=(1U<<10);
+ 8000a90:	4b11      	ldr	r3, [pc, #68]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a92:	6a1b      	ldr	r3, [r3, #32]
+ 8000a94:	4a10      	ldr	r2, [pc, #64]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a96:	f443 6380 	orr.w	r3, r3, #1024	@ 0x400
+ 8000a9a:	6213      	str	r3, [r2, #32]
+	GPIOA->AFR[0] &=~(1U<<11);
+ 8000a9c:	4b0e      	ldr	r3, [pc, #56]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000a9e:	6a1b      	ldr	r3, [r3, #32]
+ 8000aa0:	4a0d      	ldr	r2, [pc, #52]	@ (8000ad8 <debug_uart_init+0x88>)
+ 8000aa2:	f423 6300 	bic.w	r3, r3, #2048	@ 0x800
+ 8000aa6:	6213      	str	r3, [r2, #32]
+
+	/**
+	 * UART 的配置
+	 * */
+	// 1. 启用对 UART2 的时钟访问
+	RCC->APB1ENR |= UART2EN;
+ 8000aa8:	4b0a      	ldr	r3, [pc, #40]	@ (8000ad4 <debug_uart_init+0x84>)
+ 8000aaa:	6c1b      	ldr	r3, [r3, #64]	@ 0x40
+ 8000aac:	4a09      	ldr	r2, [pc, #36]	@ (8000ad4 <debug_uart_init+0x84>)
+ 8000aae:	f443 3300 	orr.w	r3, r3, #131072	@ 0x20000
+ 8000ab2:	6413      	str	r3, [r2, #64]	@ 0x40
+
+	// 2. 配置 UART 的波特率
+	uart_set_baudrate(APB1_CLK, DBG_UART_BAUDRATE);
+ 8000ab4:	f44f 31e1 	mov.w	r1, #115200	@ 0x1c200
+ 8000ab8:	4808      	ldr	r0, [pc, #32]	@ (8000adc <debug_uart_init+0x8c>)
+ 8000aba:	f000 f827 	bl	8000b0c <uart_set_baudrate>
+
+	// 3. 配置传输方向
+	USART2->CR1 = CR1_TE;
+ 8000abe:	4b08      	ldr	r3, [pc, #32]	@ (8000ae0 <debug_uart_init+0x90>)
+ 8000ac0:	2208      	movs	r2, #8
+ 8000ac2:	60da      	str	r2, [r3, #12]
+
+	// 4. 启用 UART 模块
+	USART2->CR1 |= CR1_UE;
+ 8000ac4:	4b06      	ldr	r3, [pc, #24]	@ (8000ae0 <debug_uart_init+0x90>)
+ 8000ac6:	68db      	ldr	r3, [r3, #12]
+ 8000ac8:	4a05      	ldr	r2, [pc, #20]	@ (8000ae0 <debug_uart_init+0x90>)
+ 8000aca:	f443 5300 	orr.w	r3, r3, #8192	@ 0x2000
+ 8000ace:	60d3      	str	r3, [r2, #12]
+}
+ 8000ad0:	bf00      	nop
+ 8000ad2:	bd80      	pop	{r7, pc}
+ 8000ad4:	40023800 	.word	0x40023800
+ 8000ad8:	40020000 	.word	0x40020000
+ 8000adc:	00f42400 	.word	0x00f42400
+ 8000ae0:	40004400 	.word	0x40004400
+
+08000ae4 <compute_uart_bd>:
+	// 写入数据寄存器
+	USART2->DR = (ch & 0xFF);
+}
+
+
+static uint16_t compute_uart_bd(uint32_t periph_clk, uint32_t baudrate) {
+ 8000ae4:	b480      	push	{r7}
+ 8000ae6:	b083      	sub	sp, #12
+ 8000ae8:	af00      	add	r7, sp, #0
+ 8000aea:	6078      	str	r0, [r7, #4]
+ 8000aec:	6039      	str	r1, [r7, #0]
+	return ((periph_clk + (baudrate / 2U)) / baudrate);
+ 8000aee:	683b      	ldr	r3, [r7, #0]
+ 8000af0:	085a      	lsrs	r2, r3, #1
+ 8000af2:	687b      	ldr	r3, [r7, #4]
+ 8000af4:	441a      	add	r2, r3
+ 8000af6:	683b      	ldr	r3, [r7, #0]
+ 8000af8:	fbb2 f3f3 	udiv	r3, r2, r3
+ 8000afc:	b29b      	uxth	r3, r3
+}
+ 8000afe:	4618      	mov	r0, r3
+ 8000b00:	370c      	adds	r7, #12
+ 8000b02:	46bd      	mov	sp, r7
+ 8000b04:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000b08:	4770      	bx	lr
+	...
+
+08000b0c <uart_set_baudrate>:
+
+static void uart_set_baudrate(uint32_t periph_clk, uint32_t baudrate) {
+ 8000b0c:	b580      	push	{r7, lr}
+ 8000b0e:	b082      	sub	sp, #8
+ 8000b10:	af00      	add	r7, sp, #0
+ 8000b12:	6078      	str	r0, [r7, #4]
+ 8000b14:	6039      	str	r1, [r7, #0]
+	USART2->BRR = compute_uart_bd(periph_clk, baudrate);
+ 8000b16:	6839      	ldr	r1, [r7, #0]
+ 8000b18:	6878      	ldr	r0, [r7, #4]
+ 8000b1a:	f7ff ffe3 	bl	8000ae4 <compute_uart_bd>
+ 8000b1e:	4603      	mov	r3, r0
+ 8000b20:	461a      	mov	r2, r3
+ 8000b22:	4b03      	ldr	r3, [pc, #12]	@ (8000b30 <uart_set_baudrate+0x24>)
+ 8000b24:	609a      	str	r2, [r3, #8]
+}
+ 8000b26:	bf00      	nop
+ 8000b28:	3708      	adds	r7, #8
+ 8000b2a:	46bd      	mov	sp, r7
+ 8000b2c:	bd80      	pop	{r7, pc}
+ 8000b2e:	bf00      	nop
+ 8000b30:	40004400 	.word	0x40004400
+
+08000b34 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000b34:	480d      	ldr	r0, [pc, #52]	@ (8000b6c <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 8000b36:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 8000b38:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8000b3c:	480c      	ldr	r0, [pc, #48]	@ (8000b70 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8000b3e:	490d      	ldr	r1, [pc, #52]	@ (8000b74 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000b40:	4a0d      	ldr	r2, [pc, #52]	@ (8000b78 <LoopForever+0xe>)
+  movs r3, #0
+ 8000b42:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8000b44:	e002      	b.n	8000b4c <LoopCopyDataInit>
+
+08000b46 <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 8000b46:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 8000b48:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 8000b4a:	3304      	adds	r3, #4
+
+08000b4c <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8000b4c:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8000b4e:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000b50:	d3f9      	bcc.n	8000b46 <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8000b52:	4a0a      	ldr	r2, [pc, #40]	@ (8000b7c <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000b54:	4c0a      	ldr	r4, [pc, #40]	@ (8000b80 <LoopForever+0x16>)
+  movs r3, #0
+ 8000b56:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8000b58:	e001      	b.n	8000b5e <LoopFillZerobss>
+
+08000b5a <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8000b5a:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000b5c:	3204      	adds	r2, #4
+
+08000b5e <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8000b5e:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000b60:	d3fb      	bcc.n	8000b5a <FillZerobss>
+
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8000b62:	f000 f811 	bl	8000b88 <__libc_init_array>
+/* Call the application's entry point.*/
+
+  bl main
+ 8000b66:	f7ff fbe5 	bl	8000334 <main>
+
+08000b6a <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 8000b6a:	e7fe      	b.n	8000b6a <LoopForever>
+  ldr   r0, =_estack
+ 8000b6c:	20020000 	.word	0x20020000
+  ldr r0, =_sdata
+ 8000b70:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8000b74:	20000004 	.word	0x20000004
+  ldr r2, =_sidata
+ 8000b78:	08000bf0 	.word	0x08000bf0
+  ldr r2, =_sbss
+ 8000b7c:	20000004 	.word	0x20000004
+  ldr r4, =_ebss
+ 8000b80:	20000070 	.word	0x20000070
+
+08000b84 <ADC_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8000b84:	e7fe      	b.n	8000b84 <ADC_IRQHandler>
+	...
+
+08000b88 <__libc_init_array>:
+ 8000b88:	b570      	push	{r4, r5, r6, lr}
+ 8000b8a:	4d0d      	ldr	r5, [pc, #52]	@ (8000bc0 <__libc_init_array+0x38>)
+ 8000b8c:	4c0d      	ldr	r4, [pc, #52]	@ (8000bc4 <__libc_init_array+0x3c>)
+ 8000b8e:	1b64      	subs	r4, r4, r5
+ 8000b90:	10a4      	asrs	r4, r4, #2
+ 8000b92:	2600      	movs	r6, #0
+ 8000b94:	42a6      	cmp	r6, r4
+ 8000b96:	d109      	bne.n	8000bac <__libc_init_array+0x24>
+ 8000b98:	4d0b      	ldr	r5, [pc, #44]	@ (8000bc8 <__libc_init_array+0x40>)
+ 8000b9a:	4c0c      	ldr	r4, [pc, #48]	@ (8000bcc <__libc_init_array+0x44>)
+ 8000b9c:	f000 f818 	bl	8000bd0 <_init>
+ 8000ba0:	1b64      	subs	r4, r4, r5
+ 8000ba2:	10a4      	asrs	r4, r4, #2
+ 8000ba4:	2600      	movs	r6, #0
+ 8000ba6:	42a6      	cmp	r6, r4
+ 8000ba8:	d105      	bne.n	8000bb6 <__libc_init_array+0x2e>
+ 8000baa:	bd70      	pop	{r4, r5, r6, pc}
+ 8000bac:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000bb0:	4798      	blx	r3
+ 8000bb2:	3601      	adds	r6, #1
+ 8000bb4:	e7ee      	b.n	8000b94 <__libc_init_array+0xc>
+ 8000bb6:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000bba:	4798      	blx	r3
+ 8000bbc:	3601      	adds	r6, #1
+ 8000bbe:	e7f2      	b.n	8000ba6 <__libc_init_array+0x1e>
+ 8000bc0:	08000be8 	.word	0x08000be8
+ 8000bc4:	08000be8 	.word	0x08000be8
+ 8000bc8:	08000be8 	.word	0x08000be8
+ 8000bcc:	08000bec 	.word	0x08000bec
+
+08000bd0 <_init>:
+ 8000bd0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000bd2:	bf00      	nop
+ 8000bd4:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000bd6:	bc08      	pop	{r3}
+ 8000bd8:	469e      	mov	lr, r3
+ 8000bda:	4770      	bx	lr
+
+08000bdc <_fini>:
+ 8000bdc:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000bde:	bf00      	nop
+ 8000be0:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000be2:	bc08      	pop	{r3}
+ 8000be4:	469e      	mov	lr, r3
+ 8000be6:	4770      	bx	lr

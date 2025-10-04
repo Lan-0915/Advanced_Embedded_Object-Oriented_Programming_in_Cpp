@@ -1,0 +1,113 @@
+#include "ADXL345.hpp"
+
+
+#define ADXL345_REG_DEVID			(0x00)
+#define ADXL345_DEVICE_ADDR			(0x53)
+#define ADXL345_REG_DATA_FORMAT		(0x31)
+#define ADXL345_REG_POWER_CTL		(0x2D)
+#define ADXL345_REG_DATA_START		(0x32)
+
+#define ADXL345_RANGE_4G			(0x01)
+#define ADXL345_RESET				(0x00)
+#define ADXL345_MEASURE_BIT			(0x08)
+
+#define ADXL345_MULTI_BYTE_ENABLE	0x40
+#define ADXL345_READ_OPERATION		0x80
+
+
+
+
+// 构造函数, 用于初始化 ADXL345 传感器
+// spi 参数为 SPI 类型, deviceAddress 参数为设备地址
+ADXL345::ADXL345(SPI& spi, uint8_t deviceAddress)
+		: spi(spi), deviceAddress(deviceAddress), accel_x(0), accel_y(0), accel_z(0) {
+
+}
+
+
+void ADXL345::writeRegister(uint8_t reg, uint8_t value) {
+	// 将地址和值放入缓冲区
+	uint8_t data[2] = {(uint8_t)(reg | ADXL345_MULTI_BYTE_ENABLE), value};
+
+	// 将 cs 线拉低使从机启用
+	spi.csEnable();
+
+	// 传输数据
+	spi.transmit(data, 2);
+
+	// 将 cs 线拉高使从机禁用
+	spi.csDisable();
+}
+
+
+
+void ADXL345::readRegister(uint8_t reg, uint8_t * data, uint8_t size) {
+	reg |= ADXL345_READ_OPERATION | ADXL345_MULTI_BYTE_ENABLE;
+
+	// 将 cs 线拉低使从机启用
+	spi.csEnable();
+
+	// 传输数据
+	spi.transmit(&reg, 1);
+
+	// 接收数据
+	spi.receive(data, size)
+
+	// 将 cs 线拉高使从机禁用
+	spi.csDisable();
+}
+
+
+
+
+// 初始化 ADXL345 传感器
+void ADXL345::init() {
+	// 将数据格式范围设置为 +-4g
+	writeRegister(ADXL345_REG_DATA_FORMAT, ADXL345_RANGE_4G);
+
+	// 重置所有 bits
+	writeRegister(ADXL345_REG_POWER_CTL, ADXL345_RESET);
+
+	// 配置功率控制
+	writeRegister(ADXL345_REG_POWER_CTL, ADXL345_MEASURE_BIT);
+}
+
+
+// 读取原始加速度计数据并更新内部变量
+void ADXL345::updateAcceleration() {
+	// 从数据寄存器读取加速度计数据
+	readRegister(ADXL345_REG_DATA_START, data_buffer);
+
+	// 将高位字节和低位字节组合, 形成完整加速度计数据
+	accel_x=(int16_t)((data_buffer[1]<<8)1data_buffer[0]);
+	accel_y=(int16_t)((data_buffer[3]<<8)data_buffer[2]);
+	accel_z=(int16_t)((data_buffer[5]<<8)data_buffer[4]);
+}
+
+
+// 获取 x 轴的原始加速度值
+int16_t getAccelX();
+
+// 获取 y 轴的原始加速度值
+int16_t getAccelY();
+
+// 获取 z 轴的原始加速度值
+int16_t getAccelZ();
+
+// 获取 x 轴的原始加速度 g 单位下的值
+int16_t getAccelXG();
+
+// 获取 y 轴的原始加速度 g 单位下的值
+int16_t getAccelYG();
+
+// 获取 z 轴的原始加速度 g 单位下的值
+int16_t getAccelZG();
+
+
+
+
+
+
+
+
+

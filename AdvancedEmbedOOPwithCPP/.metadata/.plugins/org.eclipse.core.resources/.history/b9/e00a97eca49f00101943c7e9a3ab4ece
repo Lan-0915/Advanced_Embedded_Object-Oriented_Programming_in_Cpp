@@ -1,0 +1,83 @@
+#include "i2c.h"
+#include "stm32f4xx.h"
+
+
+
+#define GPIOBEN		(1U<<1)
+#define I2C1EN		(1U<<21)
+
+
+// PB8...SCL
+// PB9...SDA
+
+
+void i2c1_init(void) {
+	/**
+	 * GPIOB 初始化
+	 * */
+	// 启用 GPIOB 的时钟访问
+	RCC->AHB1ENR |= GPIOBEN;
+
+	// 设置 PB8 PB9 模式为交替功能模式
+	// PB8
+	GPIOB->MODER &=~(1U<<16);
+	GPIOB->MODER |=(1U<<17);
+	// PB9
+	GPIOB->MODER &=~(1U<<18);
+	GPIOB->MODER |=(1U<<19);
+
+
+	// 设置 PB8 PB9 的输出类型设置为开漏
+	// PB8
+	GPIOB->OTYPER |=(1U<<8);
+	// PB9
+	GPIOB->OTYPER |=(1U<<9);
+
+
+	// 为 PB8 PB9 启用上拉电阻
+	// PB8
+	GPIOB->PUPDR |=(1U<<16);
+	GPIOB->PUPDR &=~(1U<<17);
+	// PB9
+	GPIOB->PUPDR |=(1U<<18);
+	GPIOB->PUPDR &=~(1U<<19);
+
+
+	// 设置 PB8 PB9 的交替功能类型为 I2C1 (AF4)
+	// PB8
+	GPIOB->AFR[1] &=~(1U<<0);
+	GPIOB->AFR[1] &=~(1U<<1);
+	GPIOB->AFR[1] |=(1U<<2);
+	GPIOB->AFR[1] &=~(1U<<3);
+	// PB9
+	GPIOB->AFR[1] &=~(1U<<4);
+	GPIOB->AFR[1] &=~(1U<<5);
+	GPIOB->AFR[1] |=(1U<<6);
+	GPIOB->AFR[1] &=~(1U<<7);
+
+
+	// 启用对 I2C1 的时钟访问
+	RCC->APB1ENR |= I2C1EN;
+
+
+
+	/**
+	 * 配置 I2C
+	 * */
+	// 进入复位模式
+
+
+	// 退出复位模式
+
+
+	// 设置外设时钟
+
+
+	// 设置 I2C 为标准模式 100kHz
+
+
+	// 设置上升时间
+
+
+	// 启用 I2C 模块
+}

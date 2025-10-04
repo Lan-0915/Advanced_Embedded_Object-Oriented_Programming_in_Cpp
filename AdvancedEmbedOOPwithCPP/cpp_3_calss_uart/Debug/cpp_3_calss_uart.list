@@ -1,0 +1,670 @@
+
+cpp_3_calss_uart.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000198  08000000  08000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         000003b4  08000198  08000198  00001198  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       0000001c  0800054c  0800054c  0000154c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  08000568  08000568  00001570  2**0
+                  CONTENTS, READONLY
+  4 .ARM          00000000  08000568  08000568  00001570  2**0
+                  CONTENTS, READONLY
+  5 .preinit_array 00000000  08000568  08000570  00001570  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000568  08000568  00001568  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  7 .fini_array   00000004  0800056c  0800056c  0000156c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  8 .data         00000000  20000000  20000000  00001570  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          0000001c  20000000  08000570  00002000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000604  2000001c  08000570  0000201c  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000030  00000000  00000000  00001570  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   00000800  00000000  00000000  000015a0  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_abbrev 0000045c  00000000  00000000  00001da0  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_aranges 000000a8  00000000  00000000  00002200  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_rnglists 00000071  00000000  00000000  000022a8  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_macro  0000de68  00000000  00000000  00002319  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_line   00000cf0  00000000  00000000  00010181  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    00050335  00000000  00000000  00010e71  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .comment      00000043  00000000  00000000  000611a6  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  000001cc  00000000  00000000  000611ec  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 21 .debug_line_str 00000055  00000000  00000000  000613b8  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000198 <__do_global_dtors_aux>:
+ 8000198:	b510      	push	{r4, lr}
+ 800019a:	4c05      	ldr	r4, [pc, #20]	@ (80001b0 <__do_global_dtors_aux+0x18>)
+ 800019c:	7823      	ldrb	r3, [r4, #0]
+ 800019e:	b933      	cbnz	r3, 80001ae <__do_global_dtors_aux+0x16>
+ 80001a0:	4b04      	ldr	r3, [pc, #16]	@ (80001b4 <__do_global_dtors_aux+0x1c>)
+ 80001a2:	b113      	cbz	r3, 80001aa <__do_global_dtors_aux+0x12>
+ 80001a4:	4804      	ldr	r0, [pc, #16]	@ (80001b8 <__do_global_dtors_aux+0x20>)
+ 80001a6:	f3af 8000 	nop.w
+ 80001aa:	2301      	movs	r3, #1
+ 80001ac:	7023      	strb	r3, [r4, #0]
+ 80001ae:	bd10      	pop	{r4, pc}
+ 80001b0:	20000000 	.word	0x20000000
+ 80001b4:	00000000 	.word	0x00000000
+ 80001b8:	08000534 	.word	0x08000534
+
+080001bc <frame_dummy>:
+ 80001bc:	b508      	push	{r3, lr}
+ 80001be:	4b03      	ldr	r3, [pc, #12]	@ (80001cc <frame_dummy+0x10>)
+ 80001c0:	b11b      	cbz	r3, 80001ca <frame_dummy+0xe>
+ 80001c2:	4903      	ldr	r1, [pc, #12]	@ (80001d0 <frame_dummy+0x14>)
+ 80001c4:	4803      	ldr	r0, [pc, #12]	@ (80001d4 <frame_dummy+0x18>)
+ 80001c6:	f3af 8000 	nop.w
+ 80001ca:	bd08      	pop	{r3, pc}
+ 80001cc:	00000000 	.word	0x00000000
+ 80001d0:	20000004 	.word	0x20000004
+ 80001d4:	08000534 	.word	0x08000534
+
+080001d8 <_ZN4GPIOC1EP12GPIO_TypeDefhb>:
+#include "GPIO.hpp"
+
+
+// 构造函数
+
+GPIO::GPIO(GPIO_TypeDef * gpioPort, uint8_t gpioPin, bool isOutput): port(gpioPort), pin(gpioPin) {
+ 80001d8:	b480      	push	{r7}
+ 80001da:	b085      	sub	sp, #20
+ 80001dc:	af00      	add	r7, sp, #0
+ 80001de:	60f8      	str	r0, [r7, #12]
+ 80001e0:	60b9      	str	r1, [r7, #8]
+ 80001e2:	4611      	mov	r1, r2
+ 80001e4:	461a      	mov	r2, r3
+ 80001e6:	460b      	mov	r3, r1
+ 80001e8:	71fb      	strb	r3, [r7, #7]
+ 80001ea:	4613      	mov	r3, r2
+ 80001ec:	71bb      	strb	r3, [r7, #6]
+ 80001ee:	68fb      	ldr	r3, [r7, #12]
+ 80001f0:	68ba      	ldr	r2, [r7, #8]
+ 80001f2:	601a      	str	r2, [r3, #0]
+ 80001f4:	68fb      	ldr	r3, [r7, #12]
+ 80001f6:	79fa      	ldrb	r2, [r7, #7]
+ 80001f8:	711a      	strb	r2, [r3, #4]
+	// 启用 GPIO 的时钟访问
+	if (gpioPort == GPIOA) RCC->AHB1ENR |= (1U<<0);
+ 80001fa:	68bb      	ldr	r3, [r7, #8]
+ 80001fc:	4a1f      	ldr	r2, [pc, #124]	@ (800027c <_ZN4GPIOC1EP12GPIO_TypeDefhb+0xa4>)
+ 80001fe:	4293      	cmp	r3, r2
+ 8000200:	d105      	bne.n	800020e <_ZN4GPIOC1EP12GPIO_TypeDefhb+0x36>
+ 8000202:	4b1f      	ldr	r3, [pc, #124]	@ (8000280 <_ZN4GPIOC1EP12GPIO_TypeDefhb+0xa8>)
+ 8000204:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 8000206:	4a1e      	ldr	r2, [pc, #120]	@ (8000280 <_ZN4GPIOC1EP12GPIO_TypeDefhb+0xa8>)
+ 8000208:	f043 0301 	orr.w	r3, r3, #1
+ 800020c:	6313      	str	r3, [r2, #48]	@ 0x30
+	if (gpioPort == GPIOC) RCC->AHB1ENR |= (1U<<2);
+ 800020e:	68bb      	ldr	r3, [r7, #8]
+ 8000210:	4a1c      	ldr	r2, [pc, #112]	@ (8000284 <_ZN4GPIOC1EP12GPIO_TypeDefhb+0xac>)
+ 8000212:	4293      	cmp	r3, r2
+ 8000214:	d105      	bne.n	8000222 <_ZN4GPIOC1EP12GPIO_TypeDefhb+0x4a>
+ 8000216:	4b1a      	ldr	r3, [pc, #104]	@ (8000280 <_ZN4GPIOC1EP12GPIO_TypeDefhb+0xa8>)
+ 8000218:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 800021a:	4a19      	ldr	r2, [pc, #100]	@ (8000280 <_ZN4GPIOC1EP12GPIO_TypeDefhb+0xa8>)
+ 800021c:	f043 0304 	orr.w	r3, r3, #4
+ 8000220:	6313      	str	r3, [r2, #48]	@ 0x30
+	// ......
+
+	// 配置引脚
+	if (isOutput) {
+ 8000222:	79bb      	ldrb	r3, [r7, #6]
+ 8000224:	2b00      	cmp	r3, #0
+ 8000226:	d016      	beq.n	8000256 <_ZN4GPIOC1EP12GPIO_TypeDefhb+0x7e>
+		gpioPort->MODER |= (1 << (2 * gpioPin));
+ 8000228:	68bb      	ldr	r3, [r7, #8]
+ 800022a:	681b      	ldr	r3, [r3, #0]
+ 800022c:	79fa      	ldrb	r2, [r7, #7]
+ 800022e:	0052      	lsls	r2, r2, #1
+ 8000230:	2101      	movs	r1, #1
+ 8000232:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000236:	431a      	orrs	r2, r3
+ 8000238:	68bb      	ldr	r3, [r7, #8]
+ 800023a:	601a      	str	r2, [r3, #0]
+		gpioPort->MODER &= ~(1 << (2 * gpioPin + 1));
+ 800023c:	68bb      	ldr	r3, [r7, #8]
+ 800023e:	681b      	ldr	r3, [r3, #0]
+ 8000240:	79fa      	ldrb	r2, [r7, #7]
+ 8000242:	0052      	lsls	r2, r2, #1
+ 8000244:	3201      	adds	r2, #1
+ 8000246:	2101      	movs	r1, #1
+ 8000248:	fa01 f202 	lsl.w	r2, r1, r2
+ 800024c:	43d2      	mvns	r2, r2
+ 800024e:	401a      	ands	r2, r3
+ 8000250:	68bb      	ldr	r3, [r7, #8]
+ 8000252:	601a      	str	r2, [r3, #0]
+ 8000254:	e00a      	b.n	800026c <_ZN4GPIOC1EP12GPIO_TypeDefhb+0x94>
+	} else {
+		gpioPort->MODER &= ~(3 << (2 * gpioPin));
+ 8000256:	68bb      	ldr	r3, [r7, #8]
+ 8000258:	681b      	ldr	r3, [r3, #0]
+ 800025a:	79fa      	ldrb	r2, [r7, #7]
+ 800025c:	0052      	lsls	r2, r2, #1
+ 800025e:	2103      	movs	r1, #3
+ 8000260:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000264:	43d2      	mvns	r2, r2
+ 8000266:	401a      	ands	r2, r3
+ 8000268:	68bb      	ldr	r3, [r7, #8]
+ 800026a:	601a      	str	r2, [r3, #0]
+	}
+}
+ 800026c:	68fb      	ldr	r3, [r7, #12]
+ 800026e:	4618      	mov	r0, r3
+ 8000270:	3714      	adds	r7, #20
+ 8000272:	46bd      	mov	sp, r7
+ 8000274:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000278:	4770      	bx	lr
+ 800027a:	bf00      	nop
+ 800027c:	40020000 	.word	0x40020000
+ 8000280:	40023800 	.word	0x40023800
+ 8000284:	40020800 	.word	0x40020800
+
+08000288 <_ZN4GPIO6toggleEv>:
+
+
+// 切换引脚状态
+void GPIO::toggle() {
+ 8000288:	b480      	push	{r7}
+ 800028a:	b083      	sub	sp, #12
+ 800028c:	af00      	add	r7, sp, #0
+ 800028e:	6078      	str	r0, [r7, #4]
+	port->ODR ^= (1U << pin);
+ 8000290:	687b      	ldr	r3, [r7, #4]
+ 8000292:	681b      	ldr	r3, [r3, #0]
+ 8000294:	6959      	ldr	r1, [r3, #20]
+ 8000296:	687b      	ldr	r3, [r7, #4]
+ 8000298:	791b      	ldrb	r3, [r3, #4]
+ 800029a:	461a      	mov	r2, r3
+ 800029c:	2301      	movs	r3, #1
+ 800029e:	fa03 f202 	lsl.w	r2, r3, r2
+ 80002a2:	687b      	ldr	r3, [r7, #4]
+ 80002a4:	681b      	ldr	r3, [r3, #0]
+ 80002a6:	404a      	eors	r2, r1
+ 80002a8:	615a      	str	r2, [r3, #20]
+}
+ 80002aa:	bf00      	nop
+ 80002ac:	370c      	adds	r7, #12
+ 80002ae:	46bd      	mov	sp, r7
+ 80002b0:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80002b4:	4770      	bx	lr
+
+080002b6 <_ZN4GPIO4readEv>:
+void GPIO::setHigh() {
+	port->ODR |= (1U << pin);
+}
+
+// 读取引脚状态
+bool GPIO::read() {
+ 80002b6:	b480      	push	{r7}
+ 80002b8:	b083      	sub	sp, #12
+ 80002ba:	af00      	add	r7, sp, #0
+ 80002bc:	6078      	str	r0, [r7, #4]
+	return (port->IDR & (1U << pin));
+ 80002be:	687b      	ldr	r3, [r7, #4]
+ 80002c0:	681b      	ldr	r3, [r3, #0]
+ 80002c2:	691a      	ldr	r2, [r3, #16]
+ 80002c4:	687b      	ldr	r3, [r7, #4]
+ 80002c6:	791b      	ldrb	r3, [r3, #4]
+ 80002c8:	4619      	mov	r1, r3
+ 80002ca:	2301      	movs	r3, #1
+ 80002cc:	408b      	lsls	r3, r1
+ 80002ce:	4013      	ands	r3, r2
+ 80002d0:	2b00      	cmp	r3, #0
+ 80002d2:	bf14      	ite	ne
+ 80002d4:	2301      	movne	r3, #1
+ 80002d6:	2300      	moveq	r3, #0
+ 80002d8:	b2db      	uxtb	r3, r3
+}
+ 80002da:	4618      	mov	r0, r3
+ 80002dc:	370c      	adds	r7, #12
+ 80002de:	46bd      	mov	sp, r7
+ 80002e0:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80002e4:	4770      	bx	lr
+
+080002e6 <_ZN4UART11setBuadRateEm>:
+class UART {
+private:
+	USART_TypeDef * uart;
+	uint32_t baudrate;
+
+	void setBuadRate(uint32_t periph_clk) {
+ 80002e6:	b480      	push	{r7}
+ 80002e8:	b083      	sub	sp, #12
+ 80002ea:	af00      	add	r7, sp, #0
+ 80002ec:	6078      	str	r0, [r7, #4]
+ 80002ee:	6039      	str	r1, [r7, #0]
+		uart->BRR = ((periph_clk + (baudrate / 2U)) / baudrate);
+ 80002f0:	687b      	ldr	r3, [r7, #4]
+ 80002f2:	685b      	ldr	r3, [r3, #4]
+ 80002f4:	085a      	lsrs	r2, r3, #1
+ 80002f6:	683b      	ldr	r3, [r7, #0]
+ 80002f8:	18d1      	adds	r1, r2, r3
+ 80002fa:	687b      	ldr	r3, [r7, #4]
+ 80002fc:	685a      	ldr	r2, [r3, #4]
+ 80002fe:	687b      	ldr	r3, [r7, #4]
+ 8000300:	681b      	ldr	r3, [r3, #0]
+ 8000302:	fbb1 f2f2 	udiv	r2, r1, r2
+ 8000306:	609a      	str	r2, [r3, #8]
+	}
+ 8000308:	bf00      	nop
+ 800030a:	370c      	adds	r7, #12
+ 800030c:	46bd      	mov	sp, r7
+ 800030e:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 8000312:	4770      	bx	lr
+
+08000314 <_ZN4UARTC1EP13USART_TypeDefm>:
+
+public:
+	// 构造函数
+	UART(USART_TypeDef * uart, uint32_t baudrate): uart(uart), baudrate(baudrate) {
+ 8000314:	b580      	push	{r7, lr}
+ 8000316:	b084      	sub	sp, #16
+ 8000318:	af00      	add	r7, sp, #0
+ 800031a:	60f8      	str	r0, [r7, #12]
+ 800031c:	60b9      	str	r1, [r7, #8]
+ 800031e:	607a      	str	r2, [r7, #4]
+ 8000320:	68fb      	ldr	r3, [r7, #12]
+ 8000322:	68ba      	ldr	r2, [r7, #8]
+ 8000324:	601a      	str	r2, [r3, #0]
+ 8000326:	68fb      	ldr	r3, [r7, #12]
+ 8000328:	687a      	ldr	r2, [r7, #4]
+ 800032a:	605a      	str	r2, [r3, #4]
+		/**
+		 * GPIO 引脚的配置
+		 * */
+		// 1. 启用对 GPIOA 的时钟访问
+		RCC->AHB1ENR |= (1U<<0);
+ 800032c:	4b20      	ldr	r3, [pc, #128]	@ (80003b0 <_ZN4UARTC1EP13USART_TypeDefm+0x9c>)
+ 800032e:	6b1b      	ldr	r3, [r3, #48]	@ 0x30
+ 8000330:	4a1f      	ldr	r2, [pc, #124]	@ (80003b0 <_ZN4UARTC1EP13USART_TypeDefm+0x9c>)
+ 8000332:	f043 0301 	orr.w	r3, r3, #1
+ 8000336:	6313      	str	r3, [r2, #48]	@ 0x30
+
+		// 2. 将 PA2 模式设置为替代功能模式
+		GPIOA->MODER &= ~(1U<<4);
+ 8000338:	4b1e      	ldr	r3, [pc, #120]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 800033a:	681b      	ldr	r3, [r3, #0]
+ 800033c:	4a1d      	ldr	r2, [pc, #116]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 800033e:	f023 0310 	bic.w	r3, r3, #16
+ 8000342:	6013      	str	r3, [r2, #0]
+		GPIOA->MODER |= (1U<<5);
+ 8000344:	4b1b      	ldr	r3, [pc, #108]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 8000346:	681b      	ldr	r3, [r3, #0]
+ 8000348:	4a1a      	ldr	r2, [pc, #104]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 800034a:	f043 0320 	orr.w	r3, r3, #32
+ 800034e:	6013      	str	r3, [r2, #0]
+
+		// 3. 设置替代功能类型 AF07 (UART2_TX)
+		GPIOA->AFR[0] |= (1U<<8);
+ 8000350:	4b18      	ldr	r3, [pc, #96]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 8000352:	6a1b      	ldr	r3, [r3, #32]
+ 8000354:	4a17      	ldr	r2, [pc, #92]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 8000356:	f443 7380 	orr.w	r3, r3, #256	@ 0x100
+ 800035a:	6213      	str	r3, [r2, #32]
+		GPIOA->AFR[0] |= (1U<<9);
+ 800035c:	4b15      	ldr	r3, [pc, #84]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 800035e:	6a1b      	ldr	r3, [r3, #32]
+ 8000360:	4a14      	ldr	r2, [pc, #80]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 8000362:	f443 7300 	orr.w	r3, r3, #512	@ 0x200
+ 8000366:	6213      	str	r3, [r2, #32]
+		GPIOA->AFR[0] |= (1U<<10);
+ 8000368:	4b12      	ldr	r3, [pc, #72]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 800036a:	6a1b      	ldr	r3, [r3, #32]
+ 800036c:	4a11      	ldr	r2, [pc, #68]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 800036e:	f443 6380 	orr.w	r3, r3, #1024	@ 0x400
+ 8000372:	6213      	str	r3, [r2, #32]
+		GPIOA->AFR[0] &= ~(1U<<11);
+ 8000374:	4b0f      	ldr	r3, [pc, #60]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 8000376:	6a1b      	ldr	r3, [r3, #32]
+ 8000378:	4a0e      	ldr	r2, [pc, #56]	@ (80003b4 <_ZN4UARTC1EP13USART_TypeDefm+0xa0>)
+ 800037a:	f423 6300 	bic.w	r3, r3, #2048	@ 0x800
+ 800037e:	6213      	str	r3, [r2, #32]
+
+		/**
+		 * UART 的配置
+		 * */
+		// 1. 启用对 UART2 的时钟访问
+		RCC->APB1ENR |= (1U<<17);
+ 8000380:	4b0b      	ldr	r3, [pc, #44]	@ (80003b0 <_ZN4UARTC1EP13USART_TypeDefm+0x9c>)
+ 8000382:	6c1b      	ldr	r3, [r3, #64]	@ 0x40
+ 8000384:	4a0a      	ldr	r2, [pc, #40]	@ (80003b0 <_ZN4UARTC1EP13USART_TypeDefm+0x9c>)
+ 8000386:	f443 3300 	orr.w	r3, r3, #131072	@ 0x20000
+ 800038a:	6413      	str	r3, [r2, #64]	@ 0x40
+
+		// 2. 配置 UART 的波特率
+		setBuadRate(16000000);
+ 800038c:	490a      	ldr	r1, [pc, #40]	@ (80003b8 <_ZN4UARTC1EP13USART_TypeDefm+0xa4>)
+ 800038e:	68f8      	ldr	r0, [r7, #12]
+ 8000390:	f7ff ffa9 	bl	80002e6 <_ZN4UART11setBuadRateEm>
+
+		// 3. 配置传输方向
+		USART2->CR1 = (1U<<3);
+ 8000394:	4b09      	ldr	r3, [pc, #36]	@ (80003bc <_ZN4UARTC1EP13USART_TypeDefm+0xa8>)
+ 8000396:	2208      	movs	r2, #8
+ 8000398:	60da      	str	r2, [r3, #12]
+
+		// 4. 启用 UART 模块
+		USART2->CR1 |= (1U<<13);
+ 800039a:	4b08      	ldr	r3, [pc, #32]	@ (80003bc <_ZN4UARTC1EP13USART_TypeDefm+0xa8>)
+ 800039c:	68db      	ldr	r3, [r3, #12]
+ 800039e:	4a07      	ldr	r2, [pc, #28]	@ (80003bc <_ZN4UARTC1EP13USART_TypeDefm+0xa8>)
+ 80003a0:	f443 5300 	orr.w	r3, r3, #8192	@ 0x2000
+ 80003a4:	60d3      	str	r3, [r2, #12]
+	}
+ 80003a6:	68fb      	ldr	r3, [r7, #12]
+ 80003a8:	4618      	mov	r0, r3
+ 80003aa:	3710      	adds	r7, #16
+ 80003ac:	46bd      	mov	sp, r7
+ 80003ae:	bd80      	pop	{r7, pc}
+ 80003b0:	40023800 	.word	0x40023800
+ 80003b4:	40020000 	.word	0x40020000
+ 80003b8:	00f42400 	.word	0x00f42400
+ 80003bc:	40004400 	.word	0x40004400
+
+080003c0 <_ZN4UART4sendEc>:
+
+
+	// 发送单个字符
+	void send(char ch) {
+ 80003c0:	b480      	push	{r7}
+ 80003c2:	b083      	sub	sp, #12
+ 80003c4:	af00      	add	r7, sp, #0
+ 80003c6:	6078      	str	r0, [r7, #4]
+ 80003c8:	460b      	mov	r3, r1
+ 80003ca:	70fb      	strb	r3, [r7, #3]
+		// 传输数据前，确保数据寄存器是空的
+		while (!(USART2->SR & (1U<<7))) {}
+ 80003cc:	bf00      	nop
+ 80003ce:	4b0a      	ldr	r3, [pc, #40]	@ (80003f8 <_ZN4UART4sendEc+0x38>)
+ 80003d0:	681b      	ldr	r3, [r3, #0]
+ 80003d2:	f003 0380 	and.w	r3, r3, #128	@ 0x80
+ 80003d6:	2b00      	cmp	r3, #0
+ 80003d8:	bf0c      	ite	eq
+ 80003da:	2301      	moveq	r3, #1
+ 80003dc:	2300      	movne	r3, #0
+ 80003de:	b2db      	uxtb	r3, r3
+ 80003e0:	2b00      	cmp	r3, #0
+ 80003e2:	d1f4      	bne.n	80003ce <_ZN4UART4sendEc+0xe>
+
+		// 写入数据寄存器
+		USART2->DR = (ch & 0xFF);
+ 80003e4:	4a04      	ldr	r2, [pc, #16]	@ (80003f8 <_ZN4UART4sendEc+0x38>)
+ 80003e6:	78fb      	ldrb	r3, [r7, #3]
+ 80003e8:	6053      	str	r3, [r2, #4]
+	}
+ 80003ea:	bf00      	nop
+ 80003ec:	370c      	adds	r7, #12
+ 80003ee:	46bd      	mov	sp, r7
+ 80003f0:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 80003f4:	4770      	bx	lr
+ 80003f6:	bf00      	nop
+ 80003f8:	40004400 	.word	0x40004400
+
+080003fc <_ZN4UART10sendStringEPKc>:
+
+	// 发送字符串
+	void sendString(const char * str) {
+ 80003fc:	b580      	push	{r7, lr}
+ 80003fe:	b082      	sub	sp, #8
+ 8000400:	af00      	add	r7, sp, #0
+ 8000402:	6078      	str	r0, [r7, #4]
+ 8000404:	6039      	str	r1, [r7, #0]
+		while (*str) {
+ 8000406:	e007      	b.n	8000418 <_ZN4UART10sendStringEPKc+0x1c>
+			send(*str++);
+ 8000408:	683b      	ldr	r3, [r7, #0]
+ 800040a:	1c5a      	adds	r2, r3, #1
+ 800040c:	603a      	str	r2, [r7, #0]
+ 800040e:	781b      	ldrb	r3, [r3, #0]
+ 8000410:	4619      	mov	r1, r3
+ 8000412:	6878      	ldr	r0, [r7, #4]
+ 8000414:	f7ff ffd4 	bl	80003c0 <_ZN4UART4sendEc>
+		while (*str) {
+ 8000418:	683b      	ldr	r3, [r7, #0]
+ 800041a:	781b      	ldrb	r3, [r3, #0]
+ 800041c:	2b00      	cmp	r3, #0
+ 800041e:	d1f3      	bne.n	8000408 <_ZN4UART10sendStringEPKc+0xc>
+		}
+	}
+ 8000420:	bf00      	nop
+ 8000422:	bf00      	nop
+ 8000424:	3708      	adds	r7, #8
+ 8000426:	46bd      	mov	sp, r7
+ 8000428:	bd80      	pop	{r7, pc}
+	...
+
+0800042c <main>:
+#include "GPIO.hpp"
+#include "UART.hpp"
+
+
+int main() {
+ 800042c:	b580      	push	{r7, lr}
+ 800042e:	b086      	sub	sp, #24
+ 8000430:	af00      	add	r7, sp, #0
+	// 创建 led, 将 PA5 设置为输出引脚
+	GPIO led(GPIOA, 5, true);
+ 8000432:	f107 0010 	add.w	r0, r7, #16
+ 8000436:	2301      	movs	r3, #1
+ 8000438:	2205      	movs	r2, #5
+ 800043a:	4913      	ldr	r1, [pc, #76]	@ (8000488 <main+0x5c>)
+ 800043c:	f7ff fecc 	bl	80001d8 <_ZN4GPIOC1EP12GPIO_TypeDefhb>
+
+	// 创建 button, 将 PC13 设置为输入引脚
+	GPIO button(GPIOC, 13, false);
+ 8000440:	f107 0008 	add.w	r0, r7, #8
+ 8000444:	2300      	movs	r3, #0
+ 8000446:	220d      	movs	r2, #13
+ 8000448:	4910      	ldr	r1, [pc, #64]	@ (800048c <main+0x60>)
+ 800044a:	f7ff fec5 	bl	80001d8 <_ZN4GPIOC1EP12GPIO_TypeDefhb>
+
+	// 创建 uart, 设置波特率为 115200
+	UART uart(USART2, 115200);
+ 800044e:	463b      	mov	r3, r7
+ 8000450:	f44f 32e1 	mov.w	r2, #115200	@ 0x1c200
+ 8000454:	490e      	ldr	r1, [pc, #56]	@ (8000490 <main+0x64>)
+ 8000456:	4618      	mov	r0, r3
+ 8000458:	f7ff ff5c 	bl	8000314 <_ZN4UARTC1EP13USART_TypeDefm>
+
+	while (1) {
+		if (!button.read()) {
+ 800045c:	f107 0308 	add.w	r3, r7, #8
+ 8000460:	4618      	mov	r0, r3
+ 8000462:	f7ff ff28 	bl	80002b6 <_ZN4GPIO4readEv>
+ 8000466:	4603      	mov	r3, r0
+ 8000468:	f083 0301 	eor.w	r3, r3, #1
+ 800046c:	b2db      	uxtb	r3, r3
+ 800046e:	2b00      	cmp	r3, #0
+ 8000470:	d004      	beq.n	800047c <main+0x50>
+			led.toggle();
+ 8000472:	f107 0310 	add.w	r3, r7, #16
+ 8000476:	4618      	mov	r0, r3
+ 8000478:	f7ff ff06 	bl	8000288 <_ZN4GPIO6toggleEv>
+		}
+
+		uart.sendString("Hello from Embedded C++ \n\r");
+ 800047c:	463b      	mov	r3, r7
+ 800047e:	4905      	ldr	r1, [pc, #20]	@ (8000494 <main+0x68>)
+ 8000480:	4618      	mov	r0, r3
+ 8000482:	f7ff ffbb 	bl	80003fc <_ZN4UART10sendStringEPKc>
+		if (!button.read()) {
+ 8000486:	e7e9      	b.n	800045c <main+0x30>
+ 8000488:	40020000 	.word	0x40020000
+ 800048c:	40020800 	.word	0x40020800
+ 8000490:	40004400 	.word	0x40004400
+ 8000494:	0800054c 	.word	0x0800054c
+
+08000498 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000498:	480d      	ldr	r0, [pc, #52]	@ (80004d0 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 800049a:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 800049c:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 80004a0:	480c      	ldr	r0, [pc, #48]	@ (80004d4 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 80004a2:	490d      	ldr	r1, [pc, #52]	@ (80004d8 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 80004a4:	4a0d      	ldr	r2, [pc, #52]	@ (80004dc <LoopForever+0xe>)
+  movs r3, #0
+ 80004a6:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 80004a8:	e002      	b.n	80004b0 <LoopCopyDataInit>
+
+080004aa <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 80004aa:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 80004ac:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 80004ae:	3304      	adds	r3, #4
+
+080004b0 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 80004b0:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 80004b2:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 80004b4:	d3f9      	bcc.n	80004aa <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 80004b6:	4a0a      	ldr	r2, [pc, #40]	@ (80004e0 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 80004b8:	4c0a      	ldr	r4, [pc, #40]	@ (80004e4 <LoopForever+0x16>)
+  movs r3, #0
+ 80004ba:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 80004bc:	e001      	b.n	80004c2 <LoopFillZerobss>
+
+080004be <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 80004be:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 80004c0:	3204      	adds	r2, #4
+
+080004c2 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 80004c2:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 80004c4:	d3fb      	bcc.n	80004be <FillZerobss>
+
+
+/* Call static constructors */
+  bl __libc_init_array
+ 80004c6:	f000 f811 	bl	80004ec <__libc_init_array>
+/* Call the application's entry point.*/
+
+  bl main
+ 80004ca:	f7ff ffaf 	bl	800042c <main>
+
+080004ce <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 80004ce:	e7fe      	b.n	80004ce <LoopForever>
+  ldr   r0, =_estack
+ 80004d0:	20020000 	.word	0x20020000
+  ldr r0, =_sdata
+ 80004d4:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 80004d8:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 80004dc:	08000570 	.word	0x08000570
+  ldr r2, =_sbss
+ 80004e0:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 80004e4:	2000001c 	.word	0x2000001c
+
+080004e8 <ADC_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 80004e8:	e7fe      	b.n	80004e8 <ADC_IRQHandler>
+	...
+
+080004ec <__libc_init_array>:
+ 80004ec:	b570      	push	{r4, r5, r6, lr}
+ 80004ee:	4d0d      	ldr	r5, [pc, #52]	@ (8000524 <__libc_init_array+0x38>)
+ 80004f0:	4c0d      	ldr	r4, [pc, #52]	@ (8000528 <__libc_init_array+0x3c>)
+ 80004f2:	1b64      	subs	r4, r4, r5
+ 80004f4:	10a4      	asrs	r4, r4, #2
+ 80004f6:	2600      	movs	r6, #0
+ 80004f8:	42a6      	cmp	r6, r4
+ 80004fa:	d109      	bne.n	8000510 <__libc_init_array+0x24>
+ 80004fc:	4d0b      	ldr	r5, [pc, #44]	@ (800052c <__libc_init_array+0x40>)
+ 80004fe:	4c0c      	ldr	r4, [pc, #48]	@ (8000530 <__libc_init_array+0x44>)
+ 8000500:	f000 f818 	bl	8000534 <_init>
+ 8000504:	1b64      	subs	r4, r4, r5
+ 8000506:	10a4      	asrs	r4, r4, #2
+ 8000508:	2600      	movs	r6, #0
+ 800050a:	42a6      	cmp	r6, r4
+ 800050c:	d105      	bne.n	800051a <__libc_init_array+0x2e>
+ 800050e:	bd70      	pop	{r4, r5, r6, pc}
+ 8000510:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000514:	4798      	blx	r3
+ 8000516:	3601      	adds	r6, #1
+ 8000518:	e7ee      	b.n	80004f8 <__libc_init_array+0xc>
+ 800051a:	f855 3b04 	ldr.w	r3, [r5], #4
+ 800051e:	4798      	blx	r3
+ 8000520:	3601      	adds	r6, #1
+ 8000522:	e7f2      	b.n	800050a <__libc_init_array+0x1e>
+ 8000524:	08000568 	.word	0x08000568
+ 8000528:	08000568 	.word	0x08000568
+ 800052c:	08000568 	.word	0x08000568
+ 8000530:	0800056c 	.word	0x0800056c
+
+08000534 <_init>:
+ 8000534:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000536:	bf00      	nop
+ 8000538:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800053a:	bc08      	pop	{r3}
+ 800053c:	469e      	mov	lr, r3
+ 800053e:	4770      	bx	lr
+
+08000540 <_fini>:
+ 8000540:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000542:	bf00      	nop
+ 8000544:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000546:	bc08      	pop	{r3}
+ 8000548:	469e      	mov	lr, r3
+ 800054a:	4770      	bx	lr

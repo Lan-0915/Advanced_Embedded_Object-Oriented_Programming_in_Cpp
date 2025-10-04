@@ -1,0 +1,30 @@
+#include "stm32f4xx.h"
+
+/**
+ * Module:
+ * FPU		// FPUF浮点单元模块
+ * UART		// UART驱动, 在串行终端产生结果
+ * GPIO		// GPIO模块, 打开LED, 来测试输出
+ * TIMEBASE	// 时间基准, 制造延迟
+ * */
+
+
+
+#define GPIOAEN		(10<<0)
+#define PINS		(10<<5)
+#define LED_PIN		PINS
+
+int main() {
+	// 启用对 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+
+	// 将 PA5 设置为输出模式
+	GPIOA->MODER |= (10<<10);
+	GPIOA->MODER &=~(10<<11);
+
+	while (1) {
+		GPIOA->ODR ^= LED_PIN;
+		for (int i = 0; i < 100000; i++) {}
+	}
+}
+

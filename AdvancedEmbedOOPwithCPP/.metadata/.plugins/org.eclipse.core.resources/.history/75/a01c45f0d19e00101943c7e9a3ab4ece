@@ -1,0 +1,80 @@
+#include <stdint.h>
+#include "uart.h"
+
+#define GPIOAEN		(1U<<0)
+#define UART2EN		(1U<<17)
+
+#define DBG_UART_BAUDRATE		115200		// 定义 UART 的波特率为 115200
+#define SYS_FREQ				16000000	// 系统时钟默认 16MHz
+#define APB1_CLK				SYS_FREQ
+#define CR1_TE					(1U<<3)
+#define CR1_UE					(1U<<13)
+#define SR_TXE					(1U<<7)
+
+
+static void uart_set_baudrate(uint32_t periph_clk, uint32_t baudrate);
+static void uart_write(int ch);
+
+
+int __io_putchar(int ch) {
+	uart_write(ch);
+	return ch;
+}
+
+
+void debug_uart_init(void) {
+	/**
+	 * GPIO 引脚的配置
+	 * */
+	// 1. 启用对 GPIOA 的时钟访问
+	RCC->AHB1ENR |= GPIOAEN;
+
+	// 2. 将 PA2 模式设置为替代功能模式
+	GPIOA->MODER &=~(1U<<4);
+	GPIOA->MODER |=(1U<<5);
+
+	// 3. 设置替代功能类型 AF07 (UART2_TX)
+	GPIOA->AFR[0] |=(1U<<8);
+	GPIOA->AFR[0] |=(1U<<9);
+	GPIOA->AFR[0] |=(1U<<10);
+	GPIOA->AFR[0] &=~(1U<<11);
+
+
+	/**
+	 * UART 的配置
+	 * */
+	// 1. 启用对 UART2 的时钟访问
+	RCC->APB1ENR |= UART2EN;
+
+	// 2. 配置 UART 的波特率
+	uart_set_baudrate(APB1_CLK, DBG_UART_BAUDRATE);
+
+	// 3. 配置传输方向
+	USART2->CR1 = CR1_TE;
+
+	// 4. 启用 UART 模块
+	USART2->CR1 |= CR1_UE;
+}
+
+
+static void uart_write(int ch) {
+	// 传输数据前，确保数据寄存器是空的
+	while (!(USART2->SR & SR_TXE)) {}
+
+	// 写入数据寄存器
+	USART2->DR (CH & 0XFF);
+}
+
+
+static uint16_t compute_uart_bd(uint32_t periph_clk, uint32_t baudrate) {
+	return ((periph_clk + (baudrate / 2U)) / baudrate);
+}
+
+static void uart_set_baudrate(uint32_t periph_clk, uint32_t baudrate) {
+	USART2->BRR = compute_uart_bd(periph_clk, baudrate);
+}
+
+
+
+
+

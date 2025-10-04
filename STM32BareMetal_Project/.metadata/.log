@@ -1,0 +1,187 @@
+!SESSION 2025-09-29 21:52:31.951 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=zh_CN
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-09-29 21:53:03.483
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-09-29 21:53:03.485
+!MESSAGE Log4j2 initialized with config file G:\STM32BareMetal_Project\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-09-29 21:53:06.310
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-09-29 21:57:59.207
+!MESSAGE Indexed '0_test' (3 sources, 53 headers) in 1.34 sec: 1,954 declarations; 2,863 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-01 01:39:14.982
+!MESSAGE Indexed '1_systick_fpu' (3 sources, 7 headers) in 0.624 sec: 778 declarations; 922 references; 13 unresolved inclusions; 29 syntax errors; 610 unresolved names (26%)
+
+!ENTRY org.eclipse.ui.navigator 4 0 2025-10-01 02:11:02.426
+!MESSAGE Cannot add P/1_systick_fpu to the list of segments in Src::P/1_systick_fpu:: as a parent.
+!STACK 0
+org.eclipse.ui.internal.navigator.NavigatorContentServiceContentProvider$CyclicPathException: Cannot add P/1_systick_fpu to the list of segments in Src::P/1_systick_fpu:: as a parent.
+	at org.eclipse.ui.internal.navigator.NavigatorContentServiceContentProvider$TreePathCompiler.addParent(NavigatorContentServiceContentProvider.java:539)
+	at org.eclipse.ui.internal.navigator.NavigatorContentServiceContentProvider.findPaths(NavigatorContentServiceContentProvider.java:602)
+	at org.eclipse.ui.internal.navigator.NavigatorContentServiceContentProvider.findPaths(NavigatorContentServiceContentProvider.java:603)
+	at org.eclipse.ui.internal.navigator.NavigatorContentServiceContentProvider.getParents(NavigatorContentServiceContentProvider.java:330)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.getParentElement(AbstractTreeViewer.java:1793)
+	at org.eclipse.jface.viewers.TreeViewer.getParentElement(TreeViewer.java:573)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.internalExpand(AbstractTreeViewer.java:1733)
+	at org.eclipse.jface.viewers.AbstractTreeViewer.setExpandedElements(AbstractTreeViewer.java:2607)
+	at org.eclipse.ui.internal.navigator.framelist.TreeViewerFrameSource.frameChanged(TreeViewerFrameSource.java:68)
+	at org.eclipse.ui.internal.navigator.CommonNavigatorFrameSource.frameChanged(CommonNavigatorFrameSource.java:55)
+	at org.eclipse.ui.internal.navigator.framelist.TreeViewerFrameSource.handlePropertyChange(TreeViewerFrameSource.java:167)
+	at org.eclipse.ui.internal.navigator.framelist.FrameList.firePropertyChange(FrameList.java:93)
+	at org.eclipse.ui.internal.navigator.framelist.FrameList.setCurrent(FrameList.java:208)
+	at org.eclipse.ui.internal.navigator.framelist.FrameList.gotoFrame(FrameList.java:165)
+	at org.eclipse.ui.internal.navigator.framelist.GoIntoAction.run(GoIntoAction.java:54)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:474)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:581)
+	at org.eclipse.jface.action.ActionContributionItem.lambda$4(ActionContributionItem.java:415)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:91)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4326)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1174)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4124)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3712)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1151)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1042)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:639)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:546)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:143)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:109)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:439)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:271)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:668)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:605)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1481)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-01 20:36:23.535
+!MESSAGE Indexed '1_system_divers-fpu' (0 sources, 0 headers) in 0 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-01 20:36:48.233
+!MESSAGE Indexed '2_system_divers-uart' (4 sources, 8 headers) in 0.352 sec: 781 declarations; 915 references; 13 unresolved inclusions; 29 syntax errors; 610 unresolved names (26%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-01 22:28:21.895
+!MESSAGE Indexed '3_system_divers-timebase' (8 sources, 68 headers) in 0.526 sec: 3,312 declarations; 5,515 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.023%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-02 15:20:02.113
+!MESSAGE Indexed '4_system_divers-gpio' (6 sources, 67 headers) in 1.3 sec: 3,267 declarations; 5,479 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.023%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-02 15:58:27.695
+!MESSAGE Indexed '5_system_divers-adc' (7 sources, 69 headers) in 0.465 sec: 3,288 declarations; 5,554 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.023%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-02 17:06:23.488
+!MESSAGE Indexed '6_system_divers-spi' (8 sources, 65 headers) in 0.417 sec: 2,741 declarations; 4,029 references; 8 unresolved inclusions; 30 syntax errors; 591 unresolved names (8%)
+
+!ENTRY org.eclipse.ui 4 0 2025-10-02 17:55:01.259
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.IllegalArgumentException: Argument not valid
+	at org.eclipse.swt.SWT.error(SWT.java:4903)
+	at org.eclipse.swt.SWT.error(SWT.java:4837)
+	at org.eclipse.swt.SWT.error(SWT.java:4808)
+	at org.eclipse.swt.custom.StyledText.setStyleRanges(StyledText.java:10186)
+	at org.eclipse.swt.custom.StyledText.setStyleRange(StyledText.java:10062)
+	at org.eclipse.cdt.internal.ui.text.c.hover.AnnotationExpansionControl.resetViewerBackground(AnnotationExpansionControl.java:898)
+	at org.eclipse.cdt.internal.ui.text.c.hover.AnnotationExpansionControl$Item.deselect(AnnotationExpansionControl.java:170)
+	at org.eclipse.cdt.internal.ui.text.c.hover.AnnotationExpansionControl$MyDisposeListener.widgetDisposed(AnnotationExpansionControl.java:192)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:140)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:91)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4326)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1174)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1198)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1179)
+	at org.eclipse.swt.widgets.Widget.release(Widget.java:889)
+	at org.eclipse.swt.widgets.Composite.releaseChildren(Composite.java:933)
+	at org.eclipse.swt.widgets.Widget.release(Widget.java:896)
+	at org.eclipse.swt.widgets.Composite.releaseChildren(Composite.java:933)
+	at org.eclipse.swt.widgets.Canvas.releaseChildren(Canvas.java:169)
+	at org.eclipse.swt.widgets.Decorations.releaseChildren(Decorations.java:715)
+	at org.eclipse.swt.widgets.Shell.releaseChildren(Shell.java:1379)
+	at org.eclipse.swt.widgets.Widget.release(Widget.java:896)
+	at org.eclipse.swt.widgets.Widget.dispose(Widget.java:478)
+	at org.eclipse.swt.widgets.Decorations.dispose(Decorations.java:396)
+	at org.eclipse.cdt.internal.ui.text.c.hover.AnnotationExpansionControl.dispose(AnnotationExpansionControl.java:698)
+	at org.eclipse.cdt.internal.ui.text.c.hover.AnnotationExpansionControl$1.viewportChanged(AnnotationExpansionControl.java:497)
+	at org.eclipse.jface.text.TextViewer.updateViewportListeners(TextViewer.java:3073)
+	at org.eclipse.jface.text.TextViewer$ViewportGuard.keyPressed(TextViewer.java:297)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:184)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:91)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4326)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1174)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1198)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1183)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1225)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1221)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1704)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4849)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:347)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4727)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:342)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5091)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Native Method)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3710)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1151)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1042)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:153)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:639)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:339)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:546)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:143)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:109)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:439)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:271)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:668)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:605)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1481)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-10-02 22:53:24.969
+!MESSAGE Indexed '7_system_divers-i2c' (6 sources, 67 headers) in 0.369 sec: 3,267 declarations; 5,479 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.023%)
+!SESSION 2025-10-03 16:26:17.451 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=zh_CN
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-10-03 16:26:26.289
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-10-03 16:26:26.290
+!MESSAGE Log4j2 initialized with config file G:\STM32BareMetal_Project\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-10-03 16:26:31.479
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2025-10-03 16:27:35.891 -----------------------------------------------
+eclipse.buildId=Version 1.19.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=zh_CN
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data G:\STM32BareMetal_Project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-10-03 16:27:41.141
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-10-03 16:27:41.142
+!MESSAGE Log4j2 initialized with config file G:\STM32BareMetal_Project\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-10-03 16:27:46.248
+!MESSAGE Started RMI Server, listening on port 41337

@@ -1,0 +1,8 @@
+#include "ADC.hpp"
+
+
+
+ADC_MODULE::ADC_MODULE(ADC_TypeDef * adc, GPIO_TypeDef * gpioPort, uint8_t pin): adc(adc), gpioPort(gpioPort), pin(pin) {
+
+}
+

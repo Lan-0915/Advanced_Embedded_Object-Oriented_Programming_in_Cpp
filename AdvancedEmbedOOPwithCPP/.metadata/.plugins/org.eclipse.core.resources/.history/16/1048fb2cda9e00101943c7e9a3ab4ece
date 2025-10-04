@@ -1,0 +1,6 @@
+#ifndef __TIMEBASE_H__
+#define __TIMEBASE_H__
+
+uint32_t get_tick(void);
+
+#endif

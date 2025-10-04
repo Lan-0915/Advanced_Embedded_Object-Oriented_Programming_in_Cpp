@@ -1,0 +1,10 @@
+20:59:05 **** Incremental Build of configuration Debug for project 2_system_divers-uart ****
+make -j32 all 
+arm-none-eabi-size  2_system_divers-uart.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5264	     92	   1900	   7256	   1c58	2_system_divers-uart.elf
+Finished building: default.size.stdout
+ 
+
+20:59:05 Build Finished. 0 errors, 0 warnings. (took 236ms)
+
