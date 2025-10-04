@@ -1,1 +1,3 @@
 # Advanced-Embedded-Object-Oriented-Programming-in-C-
+
+As embedded systems become more complex and modular, the traditional proceduralC development model faces problems such as poor maintainability and low code reuse rate in large-scale firmware projects. This project is based on the STM32 microcontroller (relying on the CubeIDE development environment). By systematically learning the embedded C++OOP concept, it overcomes the misunderstanding of OOPoverhead under the resource constraints of the microcontroller and completes the technical transformation from proceduralC to C++OOP Ultimately, the modular and reusable driver development of multiple types of peripherals is achieved, providing technical support for the large-scale development of embedded firmware.
